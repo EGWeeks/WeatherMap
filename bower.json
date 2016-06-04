@@ -1,0 +1,21 @@
+{
+  "name": "weatherApp",
+  "authors": [
+    "Ethan Weeks <ethanweeks@ymail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "animate-css#^3.5.1",
+    "jquery" : "2.2.4"
+  }
+}
