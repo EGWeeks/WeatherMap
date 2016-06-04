@@ -10,15 +10,26 @@ $(document).ready(function() {
 	  navigator.geolocation.getCurrentPosition(function(position) {
 	  	self.user.lat = position.coords.latitude;
 	    self.user.lng = position.coords.longitude;
+
+	    reverseGeocode(self.user.lat, self.user.lng);
 	    getWeather(self.user.lat, self.user.lng);
 	  });
 	};
 
+	//Human readable address
+	var reverseGeocode = function(lat, lng) {
+		var googleKey = 'AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw';
+		$.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+googleKey, function(location) {
+			console.log(location);
+		});
+	};
+
+	//Weather data
 	var getWeather = function(lat, lng) {	
 		console.log(lat+ ' '+ lng);
-		var weatherId = '35f88f2946668df8785d29c91312c21c';
-		$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+weatherId , function(data){
-			console.log(data);
+		var weatherKey = '35f88f2946668df8785d29c91312c21c';
+		$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+weatherKey , function(weather){
+			// console.log(weather);
 		});
 	};
 
