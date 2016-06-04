@@ -1,10 +1,12 @@
+'use strict';
+
 $(document).foundation();
 
 $(document).ready(function() {
 
 	var self = this;
 
-	self.user = {}
+	self.user = {};
 
 
 	// get User Location
@@ -44,7 +46,7 @@ $(document).ready(function() {
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
 
 		initMarker();
-	}
+	};
 
 
 
@@ -63,7 +65,7 @@ $(document).ready(function() {
   	});
 
 		self.marker.setMap(self.map); 
-	}
+	};
 
 
 
@@ -72,9 +74,7 @@ $(document).ready(function() {
 		var googleKey = 'AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw';
 		$.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+googleKey, function(location) {
 
-			self.user.formatAdd = location.results[2].formatted_address;
-			console.log(location.results);
-			setWeather();
+			self.user.formatAdd = location.results[3].formatted_address;
 		});
 
 		//temporary calling to not excessed api calls on weather
@@ -93,13 +93,39 @@ $(document).ready(function() {
 		// 	};
 		// 	setWeather(self.weatherData);
 		// });
+
+		//GET req is to save calls to weather api
+		$.get('weather.json', function(weather){
+			self.weatherData = {
+				main: weather.main,
+				desc: weather.weather[0],
+				wind: weather.wind
+			};
+			setWeather(self.weatherData);
+		});
+
+
 	};
 
 	var setWeather = function(weather) {
-		$('.location-title').text(self.user.formatAdd);
-		$()
+		var condition = weather.desc.main;
+		var conditionImg;
 
-	}
+		switch (condition.toLowerCase()) {
+			case 'clouds':
+				conditionImg = 'img/SVG/25.svg';
+				break;
+			case 'clear':
+				conditionImg = 'img/SVG/2.svg';
+				break;
+			default:
+				conditionImg = 'img/SVG/45.svg';
+		}
+
+		$('.location-title').text(self.user.formatAdd);
+		$('#weather-img').attr('src', conditionImg);
+		$('.temp').append(weather.main.temp);
+	};
 
 
 	//Check if app has access to user location
