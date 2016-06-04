@@ -1,18 +1,26 @@
 $(document).foundation();
+
 $(document).ready(function() {
 
 	var self = this;
-	var user = {}
+	self.user = {}
 
-		// get User Location
+	// get User Location
 	var getUserLocation = function() {
 	  navigator.geolocation.getCurrentPosition(function(position) {
-	  	user.lat = position.coords.latitude;
-	    user.lng = position.coords.longitude;
-	    console.log(user.lat);
+	  	self.user.lat = position.coords.latitude;
+	    self.user.lng = position.coords.longitude;
+	    getWeather(self.user.lat, self.user.lng);
 	  });
 	};
 
+	var getWeather = function(lat, lng) {	
+		console.log(lat+ ' '+ lng);
+		var weatherId = '35f88f2946668df8785d29c91312c21c';
+		$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+weatherId , function(data){
+			console.log(data);
+		});
+	};
 
 	//Check if app has access to user location
 	var checkLocation = (function(){
