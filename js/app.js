@@ -10,15 +10,17 @@ $(document).ready(function() {
 
 
 	// get User Location
-	var getUserLocation = function() {
+	var getLocation = function() {
 		try {
 		  navigator.geolocation.getCurrentPosition(function(position) {
 		  	self.user.lat = position.coords.latitude;
 		    self.user.lng = position.coords.longitude;
 		    initMap(self.user.lat, self.user.lng);
-		    reverseGeocode(self.user.lat, self.user.lng);
-		    getWeather(self.user.lat, self.user.lng);
-		  });
+
+		    // GET reverse gecode and weather
+		    apiCalls(self.user.lat, self.user.lng);
+
+		  }); 
 		} catch(e) {
 			alert('Ehhh... Looks like there is a problem getting your current location. Here is the Error: ' + e);
 		}
@@ -69,43 +71,34 @@ $(document).ready(function() {
 
 
 
-	//Human readable address
-	var reverseGeocode = function(lat, lng) {
-		var googleKey = 'AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw';
-		$.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+googleKey, function(location) {
+	//Calls reverse geocode and weather api
+	var apiCalls = function(lat, lng) {
 
-			self.user.formatAdd = location.results[3].formatted_address;
-		});
+		//Weather api call
+		//return $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
 
-		//temporary calling to not excessed api calls on weather
+		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
+				$.get('weather.json'))
+			.then(function(location, weather) {
+
+				self.user.formatAdd = location[0].results[3].formatted_address;
+
+				self.weather = {
+					main: weather[0].main,
+					desc: weather[0].weather[0],
+					wind: weather[0].wind
+				};
+
+				setWeather(self.user.formatAdd, self.weather);
+				
+			});
+
 	};
 
 
 
-	//Weather data
-	var getWeather = function(lat, lng) {	
-		// var weatherKey = '35f88f2946668df8785d29c91312c21c';
-		// $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+weatherKey , function(weather){
-		// 	self.weatherData = {
-		// 		main: weather.main,
-		// 		desc: weather.weather[0],
-		// 		wind: weather.wind
-		// 	};
-		// 	setWeather(self.weatherData);
-		// });
-
-		//GET req is to save calls to weather api
-		$.get('weather.json', function(weather){
-			self.weatherData = {
-				main: weather.main,
-				desc: weather.weather[0],
-				wind: weather.wind
-			};
-			setWeather(self.weatherData);
-		});
-	};
-
-	var setWeather = function(weather) {
+	//Weather data to show
+	var setWeather = function(location, weather) {
 		var condition = weather.desc.main;
 		var conditionImg;
 
@@ -120,7 +113,7 @@ $(document).ready(function() {
 				conditionImg = 'img/SVG/45.svg';
 		}
 
-		$('.location-title').text(self.user.formatAdd);
+		$('.location-title').text(location);
 		$('#weather-img').attr('src', conditionImg);
 		$('.temp').append((weather.main.temp * 9/5) - 459.67);
 	};
@@ -129,7 +122,7 @@ $(document).ready(function() {
 	//Check if app has access to user location
 	var checkLocation = (function(){
 		if (navigator.geolocation) {
-		  getUserLocation();
+		  getLocation();
 		}
 		else {
 		  alert('Geolocation is not supported for this Browser/OS version yet or you need to allow access to your current location.');
