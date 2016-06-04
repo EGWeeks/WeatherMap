@@ -72,7 +72,7 @@ $(document).ready(function() {
 		var googleKey = 'AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw';
 		$.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+googleKey, function(location) {
 
-			self.user.formatAdd = location.results[3].formatted_address;
+			self.user.formatAdd = location.results[2].formatted_address;
 			console.log(location.results);
 			setWeather();
 		});
@@ -97,6 +97,7 @@ $(document).ready(function() {
 
 	var setWeather = function(weather) {
 		$('.location-title').text(self.user.formatAdd);
+		$()
 
 	}
 
