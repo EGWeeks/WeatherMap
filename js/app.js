@@ -103,8 +103,6 @@ $(document).ready(function() {
 			};
 			setWeather(self.weatherData);
 		});
-
-
 	};
 
 	var setWeather = function(weather) {
@@ -124,7 +122,7 @@ $(document).ready(function() {
 
 		$('.location-title').text(self.user.formatAdd);
 		$('#weather-img').attr('src', conditionImg);
-		$('.temp').append(weather.main.temp);
+		$('.temp').append((weather.main.temp * 9/5) - 459.67);
 	};
 
 
