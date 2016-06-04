@@ -3,8 +3,8 @@ $(document).foundation();
 $(document).ready(function() {
 
 	var self = this;
-	self.user = {}
 
+	self.user = {}
 
 
 	// get User Location
@@ -73,7 +73,11 @@ $(document).ready(function() {
 		$.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+googleKey, function(location) {
 
 			self.user.formatAdd = location.results[3].formatted_address;
+			console.log(location.results);
+			setWeather();
 		});
+
+		//temporary calling to not excessed api calls on weather
 	};
 
 
@@ -82,10 +86,19 @@ $(document).ready(function() {
 	var getWeather = function(lat, lng) {	
 		// var weatherKey = '35f88f2946668df8785d29c91312c21c';
 		// $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+weatherKey , function(weather){
-		// 	// console.log(weather);
+		// 	self.weatherData = {
+		// 		main: weather.main,
+		// 		desc: weather.weather[0],
+		// 		wind: weather.wind
+		// 	};
+		// 	setWeather(self.weatherData);
 		// });
 	};
 
+	var setWeather = function(weather) {
+		$('.location-title').text(self.user.formatAdd);
+
+	}
 
 
 	//Check if app has access to user location
