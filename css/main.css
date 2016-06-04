@@ -7,9 +7,24 @@ body {
 }
 
 .temp {
-	padding: 0 5px;
-	width: 60px;
+	font-size: 40px;
+	font-weight: bold;
 }
+
+.desc {
+	font-weight: bold;
+}
+
+.speed {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.humid {
+	font-size: 30px;
+	font-weight: bold;
+}
+
 #map {
 	z-index: -1;
 	position: absolute;
@@ -22,4 +37,14 @@ body {
 
 #weather-img {
 	width: 60px;
+}
+
+#temp-img {
+	margin-top: -30px;
+	margin-left: -12px;
+	display: inline-block;
+}
+
+#wind-img{
+	transform: rotate(180deg);
 }
