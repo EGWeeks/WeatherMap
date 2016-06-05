@@ -1,8 +1,7 @@
 'use strict';
 
-$(document).foundation();
-
 $(document).ready(function() {
+	$(document).foundation();
 
 	var self = this;
 
@@ -69,8 +68,13 @@ $(document).ready(function() {
   	});
 
 		self.marker.setMap(self.map); 
+
+		// markerListener(self.marker);
 	};
 
+	var markerListener = function(marker) {
+		marker.addlistener();
+	};
 
 
 	//Calls reverse geocode and weather api
@@ -113,26 +117,31 @@ $(document).ready(function() {
 		console.log(localWeather.wind);
 		if(localWeather.country === 'us') {
 			localWeather.temp = Math.round((weather.main.temp * 9/5) - 459.67);
-			localWeather.tempImg = 'img/SVG/47.svg';
+			localWeather.tempImg = 'wi wi-fahrenheit';
 		} else {
 			localWeather.temp = Math.round(weather.main.temp - 273.15);
-			localWeather.tempImg = 'img/SVG/46.svg';
+			localWeather.tempImg = 'wi wi-celsius';
 		}
 
 		switch (localWeather.main) {
 			case 'clouds':
+				localWeather.icon = 'wi wi-cloudy';
 				localWeather.img = 'img/SVG/25.svg';
 				break;
 			case 'clear':
+				localWeather.icon = 'wi wi-day-sunny';
 				localWeather.img = 'img/SVG/2.svg';
 				break;
 			case 'rain':
+				localWeather.icon = 'wi wi-rain';
 				localWeather.img = 'img/SVG/18.svg';
 				break;
 			case 'snow':
+				localWeather.icon = 'wi wi-snow';
 				localWeather.img = 'img/SVG/23.svg';
 				break;
 			default:
+				localWeather.icon = 'wi wi-na';
 				localWeather.img = 'img/SVG/45.svg';
 		}
 		initMap(self.user.lat, self.user.lng, localWeather.img);
@@ -146,16 +155,16 @@ $(document).ready(function() {
 		// title
 		$('.location-title').text(localWeather.state);
 		//weather icon and temp
-		$('#weather-img').attr('src', localWeather.img);
+		$('#weather-img').addClass(localWeather.icon);
 		$('.temp').append(localWeather.temp);
-		$('#temp-img').attr('src', localWeather.tempImg);
+		$('#temp-img').addClass(localWeather.tempImg);
 		//Weather description
 		$('.desc').append(localWeather.desc);
 		//wind icon and speed
-		$('#wind-img').attr('src', 'img/SVG/6.svg');
+		$('#wind-img').addClass('wi wi-windy');
 		$('.speed').append(localWeather.wind + ' mph');
 		//humid icon and percent
-		$('#humid-img').attr('src', 'img/SVG/humid.svg');
+		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').append(localWeather.humid + ' &#37;');
 	};
 
@@ -169,5 +178,4 @@ $(document).ready(function() {
 		  alert('Geolocation is not supported for this Browser/OS version yet or you need to allow access to your current location.');
 		}
 	})();
-
 });
