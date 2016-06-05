@@ -14,7 +14,6 @@ $(document).ready(function() {
 		  navigator.geolocation.getCurrentPosition(function(position) {
 		  	self.user.lat = position.coords.latitude;
 		    self.user.lng = position.coords.longitude;
-
 		    // GET reverse gecode and weather
 		    apiCalls(self.user.lat, self.user.lng);
 
@@ -27,7 +26,7 @@ $(document).ready(function() {
 
 
 	//inital a new map
-	var initMap = function(lat, lng, icon) {
+	var initMap = function(lat, lng, img) {
 
 	  	var mapOptions = {
         zoom: 10,
@@ -44,8 +43,7 @@ $(document).ready(function() {
     	};
 
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
-
-		initMarker(icon);
+		initMarker(img);
 	};
 
 
@@ -73,7 +71,11 @@ $(document).ready(function() {
 	};
 
 	var markerListener = function(marker) {
-		marker.addlistener();
+		marker.addListener('mouseup', function() {
+
+			// marker.position[vm.marker.position()];
+
+		});
 	};
 
 
@@ -114,7 +116,7 @@ $(document).ready(function() {
 			humid : weather.main.humidity,
 			wind : Math.round(weather.wind.speed * 0.44704)
 		};
-		console.log(localWeather.wind);
+
 		if(localWeather.country === 'us') {
 			localWeather.temp = Math.round((weather.main.temp * 9/5) - 459.67);
 			localWeather.tempImg = 'wi wi-fahrenheit';
@@ -178,4 +180,5 @@ $(document).ready(function() {
 		  alert('Geolocation is not supported for this Browser/OS version yet or you need to allow access to your current location.');
 		}
 	})();
+
 });

@@ -69,14 +69,18 @@
 	}
 }
 
-
+/* Allows Weather bar sits on top of map, 
+	Still allows for maps funcationality */
+.weather-bar {
+	position: relative;
+	z-index: 1;
+}
 
 .desc {
 	font-weight: bold;
 }
 
 #map {
-	z-index: -1;
 	position: absolute;
 	top: 0;
 	right: 0;

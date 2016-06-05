@@ -9,37 +9,41 @@
 	<link rel='stylesheet' href='css/main.css' type='text/css' />
 </head>
 <body>
-	<div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
-	  <button class="menu-icon" type="button" data-toggle></button>
-	  <div class="title-bar-title">Menu</div>
+	<div class='weather-bar'>
+		<div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+		  <button class="menu-icon" type="button" data-toggle></button>
+		  <div class="title-bar-title">Menu</div>
+		</div>
+		<div class="top-bar" id="example-menu">
+		  <div class="top-bar-left">
+		    <ul class="dropdown menu" data-dropdown-menu>
+		      <li class="menu-text location-title"></li>
+		    </ul>
+		  </div>
+		  <div class="top-bar-right">
+		    <ul class="menu">
+		      <li>
+		      	<a href="#">
+							<i id='weather-img' class=''></i>
+							<span class='temp'></span><i id='temp-img' class=''></i>
+						</a>
+					</li>
+		      <li><a href="#">
+						<i id='wind-img' class=''></i>
+						<span class='speed'></span>
+					</a></li>
+					<li><a href="#">
+						<i id='humid-img' class=''></i>
+						<span class='humid'></span>
+					</a></li>
+		    </ul>
+		  </div>
+		</div>
+		<!-- Button -->
+		<div class='weather-update row large-12 small-12 text-center'>
+			<a href='#' class='large button'>Local Weather</a>
+		</div>
 	</div>
-
-	<div class="top-bar" id="example-menu">
-	  <div class="top-bar-left">
-	    <ul class="dropdown menu" data-dropdown-menu>
-	      <li class="menu-text location-title"></li>
-	    </ul>
-	  </div>
-	  <div class="top-bar-right">
-	    <ul class="menu">
-	      <li>
-	      	<a href="#">
-						<i id='weather-img' class=''></i>
-						<span class='temp'></span><i id='temp-img' class=''></i>
-					</a>
-				</li>
-	      <li><a href="#">
-					<i id='wind-img' class=''></i>
-					<span class='speed'></span>
-				</a></li>
-				<li><a href="#">
-					<i id='humid-img' class=''></i>
-					<span class='humid'></span>
-				</a></li>
-	    </ul>
-	  </div>
-	</div>
-
 	<div id='map'>
 	</div>
 	<script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
