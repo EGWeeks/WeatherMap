@@ -71,6 +71,8 @@ $(document).ready(function() {
 		markerListener(self.marker);
 	};
 
+
+	// Marker update weather data
 	var markerListener = function(marker) {
 
 		marker.addListener('mouseup', function() {
@@ -84,14 +86,18 @@ $(document).ready(function() {
 			$('.update-button')
 				.removeClass('display-none')
 				.addClass('animated fade-in-animation');
-				
+
 		});
 
-		$('.update-button').click(function(event) {
-			event.stopPropagation();
+		$('.update-button').click(function() {
 			$('.update-button')
 				.removeClass('fade-in-animation')
-				.addClass('fade-out-animation display-none');
+				.addClass('fade-out-animation');
+				// Add display-none class after fade-out-animation has occurred
+				// Has to be a better way to do this
+				setTimeout(function(){
+					$('.update-button').addClass('display-none');
+				}, 1000);
 
 			marker.position[self.marker.getPosition()];
 			var coords = JSON.stringify(marker.position);
