@@ -162,7 +162,7 @@ $(document).ready(function() {
 		$('.desc').append(localWeather.desc);
 		//wind icon and speed
 		$('#wind-img').addClass('wi wi-windy');
-		$('.speed').append(localWeather.wind + ' mph');
+		$('.speed').append(localWeather.wind + ' MPH');
 		//humid icon and percent
 		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').append(localWeather.humid + ' &#37;');
