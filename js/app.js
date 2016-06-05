@@ -6,7 +6,7 @@ $(document).ready(function() {
 	var self = this;
 
 	self.user = {};
-
+	self.user.count = 0;
 
 	// get User Location
 	var getLocation = function() {
@@ -14,6 +14,8 @@ $(document).ready(function() {
 		  navigator.geolocation.getCurrentPosition(function(position) {
 		  	self.user.lat = position.coords.latitude;
 		    self.user.lng = position.coords.longitude;
+			  // Init map
+		    initMap(self.user.lat, self.user.lng);
 		    // GET reverse gecode and weather
 		    apiCalls(self.user.lat, self.user.lng);
 
@@ -26,7 +28,7 @@ $(document).ready(function() {
 
 
 	//inital a new map
-	var initMap = function(lat, lng, img) {
+	var initMap = function(lat, lng) {
 
 	  	var mapOptions = {
         zoom: 10,
@@ -34,7 +36,8 @@ $(document).ready(function() {
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         zoomControl: true,
         zoomControlOptions: {
-			  	position: google.maps.ControlPosition.LEFT_CENTER
+        	style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+			  	position: google.maps.ControlPosition.BOTTOM_CENTER
 			  },
         mapTypeControl: false,
 			  scaleControl: false,
@@ -43,14 +46,12 @@ $(document).ready(function() {
     	};
 
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
-		initMarker(img);
 	};
 
 
 
 	//initial a new marker
 	var initMarker = function(icon) {
-
 		//MUST USE user obj lat and lng and not maps for modularity	
 		var coords = new google.maps.LatLng(self.user.lat, self.user.lng);
 
@@ -67,13 +68,33 @@ $(document).ready(function() {
 
 		self.marker.setMap(self.map); 
 
-		// markerListener(self.marker);
+		markerListener(self.marker);
 	};
 
 	var markerListener = function(marker) {
-		marker.addListener('mouseup', function() {
 
-			// marker.position[vm.marker.position()];
+		marker.addListener('mouseup', function() {
+			//Show button when marker has been moved
+			$('.update-button')
+				.removeClass('display-none')
+				.addClass('animated fade-in-animation');
+		});
+
+		$('.update-button').click(function() {
+			$('.update-button')
+				.removeClass('fade-in-animation')
+				.addClass('fade-out-animation display-none');
+
+			marker.position[self.marker.getPosition()];
+			var coords = JSON.stringify(marker.position);
+			var coordsObj = JSON.parse(coords);
+
+			console.log(coordsObj);
+			//RESET User location to show a single marker
+			self.user.lat = coords.lat;
+			self.user.lng = coords.lng;
+
+			apiCalls(coordsObj.lat, coordsObj.lng);
 
 		});
 	};
@@ -146,7 +167,8 @@ $(document).ready(function() {
 				localWeather.icon = 'wi wi-na';
 				localWeather.img = 'img/SVG/45.svg';
 		}
-		initMap(self.user.lat, self.user.lng, localWeather.img);
+		//Marker icon depends on weather api calls return value
+		initMarker(localWeather.img);
 		setWeather(localWeather);
 	};
 
@@ -158,16 +180,16 @@ $(document).ready(function() {
 		$('.location-title').text(localWeather.state);
 		//weather icon and temp
 		$('#weather-img').addClass(localWeather.icon);
-		$('.temp').append(localWeather.temp);
+		$('.temp').text(localWeather.temp);
 		$('#temp-img').addClass(localWeather.tempImg);
 		//Weather description
-		$('.desc').append(localWeather.desc);
+		$('.desc').text(localWeather.desc);
 		//wind icon and speed
 		$('#wind-img').addClass('wi wi-windy');
-		$('.speed').append(localWeather.wind + ' MPH');
+		$('.speed').text(localWeather.wind + ' MPH');
 		//humid icon and percent
 		$('#humid-img').addClass('wi wi-humidity');
-		$('.humid').append(localWeather.humid + ' &#37;');
+		$('.humid').text(localWeather.humid + ' %');
 	};
 
 

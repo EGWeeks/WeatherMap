@@ -76,6 +76,26 @@
 	z-index: 1;
 }
 
+
+/*** Update Weather button ***/
+
+.display-none {
+	display: none;
+}
+
+.fade-in-animation {
+	-webkit-animation: fadeInRightBig 1s;
+  animation: fadeInRightBig 1s;
+}
+
+.fade-out-animation {
+	-webkit-animation: fadeOutRightBig 1s;
+  animation: fadeOutRightBig 1s;
+}
+
+
+/*** Map + text < might be useless right now ***/
+
 .desc {
 	font-weight: bold;
 }
