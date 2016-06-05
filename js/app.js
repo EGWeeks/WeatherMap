@@ -123,8 +123,17 @@ $(document).ready(function() {
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('weather.json'))
 			.then(function(location, weather) {
-				console.log(location);
-				self.user.formatAdd = location[0].results[3].formatted_address;
+
+				var locate = location[0].results;
+				// From observation - remote locations -
+				// Google will return at least two formatted address
+				if(locate.length <= 2){
+					self.user.formatAdd = locate[0].formatted_address;
+				} else if(locate.length === 3) {
+					self.user.formatAdd = locate[1].formatted_address;
+				} else {
+					self.user.formatAdd = locate[3].formatted_address;
+				}
 
 				self.weather = {
 					main: weather[0].main,
