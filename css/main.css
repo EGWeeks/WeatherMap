@@ -4,27 +4,24 @@
 	}
 
 	.wi {
-		font-size: 145%;
+		font-size: 2.25rem;
 	}
 
 	.location-title {
 		color: #2199e8;
-		font-size: 135%;
+		font-size: 1.50rem;
+	}
+
+	.temp, .speed, .humid {
+		font-weight: bold;
 	}
 
 	.temp {
 		font-size: 2.25rem;
-		font-weight: bold;
 	}
 
-	.speed {
-		font-size: 1.25rem;
-		font-weight: bold;
-	}
-
-	.humid {
-		font-size: 1.25rem;
-		font-weight: bold;
+	.speed, .humid {
+		font-size: 1.30rem;
 	}
 
 	#temp-img {
@@ -33,34 +30,65 @@
 	}
 }
 
-@media only screen and (min-width: 41em) {
+@media (min-width: 40.1em) and (max-width: 48.5em) {
+	.menu li a {
+		padding: 0 0.8rem;
+	}
+
+	.wi {
+		font-size: 2.25rem;
+	}
+
+	.location-title {
+		padding: 0.4rem 0.5rem;
+		color: #2199e8;
+		font-size: 1.50rem;
+	}
+
+	.temp, .speed, .humid {
+		font-weight: bold;
+	}
+
+	.temp {
+		font-size: 2.25rem;
+	}
+
+	.speed, .humid {
+		font-size: 1.30rem;
+	}
+
+	#temp-img {
+		vertical-align: top;
+		font-size: 1.5rem;
+	}
+}
+
+@media only screen and (min-width: 48.6em) {
 
 	.menu li a {
 		padding: 0 1rem;
 	}
 
 	.wi {
-		font-size: 160%;
+		font-size: 2.5rem;
 	}
 
 	.location-title {
+		padding: 0.4rem 0.5rem;
 		color: #2199e8;
-		font-size: 150%;
+		font-size: 1.75rem;
+	}
+
+	.temp, .speed, .humid {
+		font-weight: bold;
 	}
 
 	.temp {
 		font-size: 2.5rem;
-		font-weight: bold;
 	}
 
-	.speed {
-		font-size: 1.5rem;
-		font-weight: bold;
-	}
-
-	.humid {
-		font-size: 1.5rem;
-		font-weight: bold;
+	.speed, .humid {
+		font-size: 1.6rem;
 	}
 
 	#temp-img {
@@ -71,6 +99,7 @@
 
 /* Allows Weather bar sits on top of map, 
 	Still allows for maps funcationality */
+
 .weather-bar {
 	position: relative;
 	z-index: 1;
@@ -94,11 +123,7 @@
 }
 
 
-/*** Map + text < might be useless right now ***/
-
-.desc {
-	font-weight: bold;
-}
+/*** Map ***/
 
 #map {
 	position: absolute;

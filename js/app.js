@@ -36,8 +36,7 @@ $(document).ready(function() {
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         zoomControl: true,
         zoomControlOptions: {
-        	style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-			  	position: google.maps.ControlPosition.BOTTOM_CENTER
+			  	position: google.maps.ControlPosition.LEFT_BOTTOM
 			  },
         mapTypeControl: false,
 			  scaleControl: false,
@@ -103,7 +102,6 @@ $(document).ready(function() {
 			var coords = JSON.stringify(marker.position);
 			var coordsObj = JSON.parse(coords);
 
-			console.log(coordsObj);
 			//RESET User location to show a single marker
 			self.user.lat = coords.lat;
 			self.user.lng = coords.lng;
@@ -119,9 +117,9 @@ $(document).ready(function() {
 
 		//Weather api call
 		//return $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
-
+		// $.get('weather.json')
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('weather.json'))
+				$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c'))
 			.then(function(location, weather) {
 
 				var locate = location[0].results;
