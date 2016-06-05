@@ -74,13 +74,21 @@ $(document).ready(function() {
 	var markerListener = function(marker) {
 
 		marker.addListener('mouseup', function() {
+			// if marker and weather api is called more than once
+			// it will still have fade out class attached to it 
+			// check if it exist and remove it 
+			if($('.update-button').hasClass('fade-out-animation')){
+				$('.update-button').removeClass('fade-out-animation');
+			}
 			//Show button when marker has been moved
 			$('.update-button')
 				.removeClass('display-none')
 				.addClass('animated fade-in-animation');
+				
 		});
 
-		$('.update-button').click(function() {
+		$('.update-button').click(function(event) {
+			event.stopPropagation();
 			$('.update-button')
 				.removeClass('fade-in-animation')
 				.addClass('fade-out-animation display-none');
@@ -109,6 +117,7 @@ $(document).ready(function() {
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('weather.json'))
 			.then(function(location, weather) {
+				console.log(location);
 				self.user.formatAdd = location[0].results[3].formatted_address;
 
 				self.weather = {
