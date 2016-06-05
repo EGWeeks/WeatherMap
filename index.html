@@ -5,43 +5,42 @@
 	<title>Weather app</title>
 	<link rel='stylesheet' href='bower_components/animate.css/animate.min.css' type='text/css' />
 	<link rel='stylesheet' href='css/foundation.min.css' type='text/css' />
+	<link rel='stylesheet' href='css/weather-icons.min.css' type='text/css' />
 	<link rel='stylesheet' href='css/main.css' type='text/css' />
 </head>
 <body>
-	<div id='map'>
+	<div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+	  <button class="menu-icon" type="button" data-toggle></button>
+	  <div class="title-bar-title">Menu</div>
 	</div>
-	<div class='row'>
-		<div class='large-8 columns nine-columns'>
-		</div>
-		<div class='large-4 columns weather-info'>
-			<div class='row large-12 columns text-center'>
-				<h3 class='location-title'></h3>
-			</div>
-			<div class='row'>
-				<div class='small-6 large-6 columns text-right'>
-					<img id='weather-img' src='' />
-				</div>
-				<div class='small-6 large-6 columns'>
-					<p><span class='temp'></span><img id='temp-img' src='' /></p> 
-				</div>
-			</div>
-			<div class='row'>
-				<div class='small-6 large-6 columns text-right'>
-					<img id='wind-img' src='' />
-				</div>
-				<div class='small-6 large-6 columns'>
-					<p><span class='speed'></span></p> 
-				</div>
-			</div>
-			<div class='row'>
-				<div class='small-6 large-6 columns text-right'>
-					<img id='humid-img' src='' />
-				</div>
-				<div class='small-6 large-6 columns'>
-					<p><span class='humid'></span></p> 
-				</div>
-			</div>
-		</div>
+
+	<div class="top-bar" id="example-menu">
+	  <div class="top-bar-left">
+	    <ul class="dropdown menu" data-dropdown-menu>
+	      <li class="menu-text location-title"></li>
+	    </ul>
+	  </div>
+	  <div class="top-bar-right">
+	    <ul class="menu">
+	      <li>
+	      	<a href="#">
+						<i id='weather-img' class=''></i>
+						<span class='temp'></span><i id='temp-img' class=''></i>
+					</a>
+				</li>
+	      <li><a href="#">
+					<i id='wind-img' class=''></i>
+					<span class='speed'></span>
+				</a></li>
+				<li><a href="#">
+					<i id='humid-img' class=''></i>
+					<span class='humid'></span>
+				</a></li>
+	    </ul>
+	  </div>
+	</div>
+
+	<div id='map'>
 	</div>
 	<script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
 	<script type='text/javascript' src='js/foundation.min.js'></script>
