@@ -64,14 +64,14 @@ $(document).ready(function() {
 		self.marker = new google.maps.Marker({
     			position: coords,
     			icon: {
-    				url: 'img/pointer.svg',
+    				url: 'img/sunny.svg',
     				anchor: new google.maps.Point(21, 8)
     			},
     			animation: google.maps.Animation.DROP,
     			draggable: true
 
   	});
-
+		// increase counter after marker is set
 		self.count++;
 
 		self.marker.setMap(self.map); 
