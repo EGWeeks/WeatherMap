@@ -6,7 +6,8 @@ $(document).ready(function() {
 	var self = this;
 
 	self.user = {};
-	self.user.count = 0;
+	//current using open weather api
+	// wundergroundKey = 'acb24fc760a62b97';
 
 	// get User Location
 	var getLocation = function() {
@@ -51,7 +52,8 @@ $(document).ready(function() {
 
 	//initial a new marker
 	var initMarker = function(icon) {
-		//MUST USE user obj lat and lng and not maps for modularity	
+
+		//MUST USE user obj lat and lng and not maps
 		var coords = new google.maps.LatLng(self.user.lat, self.user.lng);
 
 		self.marker = new google.maps.Marker({
@@ -69,6 +71,7 @@ $(document).ready(function() {
 
 		markerListener(self.marker);
 	};
+
 
 
 	// Marker update weather data
@@ -112,17 +115,19 @@ $(document).ready(function() {
 	};
 
 
+
 	//Calls reverse geocode and weather api
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
 		//return $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
-		// $.get('weather.json')
+
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c'))
+				$.get('weather.json'))
 			.then(function(location, weather) {
 
 				var locate = location[0].results;
+				console.log(locate);
 				// From observation - remote locations -
 				// Google will return at least two formatted address
 				if(locate.length <= 2){
@@ -132,7 +137,7 @@ $(document).ready(function() {
 				} else {
 					self.user.formatAdd = locate[3].formatted_address;
 				}
-
+				console.log(weather);
 				self.weather = {
 					main: weather[0].main,
 					desc: weather[0].weather[0],
@@ -157,7 +162,7 @@ $(document).ready(function() {
 			main : weather.desc.main.toLowerCase(),
 			desc : weather.desc.description,
 			humid : weather.main.humidity,
-			wind : Math.round(weather.wind.speed * 0.44704)
+			wind : Math.round(2.237 * weather.wind.speed)
 		};
 
 		if(localWeather.country === 'us') {
