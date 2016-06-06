@@ -120,10 +120,11 @@ $(document).ready(function() {
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
-		//return $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
-
+		// $.get('wunderground.json')
+		//$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
+		//$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/q/'+lat+','+lng+'.json');
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('wunderground.json'))
+				$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/q/'+lat+','+lng+'.json'))
 			.then(function(location, weather) {
 				console.log(weather);
 				var locate = location[0].results;
@@ -161,40 +162,41 @@ $(document).ready(function() {
 	var checkWeather = function(location, weather) {
 
 		// weather = self.weather
-
+		console.log(weather.country.toLowerCase());
 		if(weather.country.toLowerCase() === 'us') {
 			weather.temp = Math.round(weather.tempFah);
 			weather.tempImg = 'wi wi-fahrenheit';
 		} else {
-			weather.temp = Math.round((weather.temp - 32) * 5/9);
+			weather.temp = Math.round((weather.tempFah - 32) * 5/9);
 			weather.tempImg = 'wi wi-celsius';
 		}
-
+		console.log(weather.tempImg);
 		switch (weather.main.toLowerCase()) {
-			case 'partlysunny':
-			case 'partlycloudy':
-				weather.icon = 'wi wi-day-cloudy';
-				weather.img = 'img/SVG/8.svg';
-				break;
-			case 'cloudy':
-				weather.icon = 'wi wi-cloudy';
-				weather.img = 'img/SVG/25.svg';
-				break;
 			case 'clear':
 				weather.icon = 'wi wi-day-sunny';
 				weather.img = 'img/SVG/2.svg';
-				break;
-			case 'snow':
-				weather.icon = 'wi wi-snow';
-				weather.img = 'img/SVG/23.svg';
 				break;
 			case 'rain':
 				weather.icon = 'wi wi-rain';
 				weather.img = 'img/SVG/18.svg';
 				break;
+			case 'mostlycloudy':
+			case 'partlycloudy':
+			case 'cloudy':
+				weather.icon = 'wi wi-cloudy';
+				weather.img = 'img/SVG/25.svg';
+				break;
+			case 'partlysunny':
+				weather.icon = 'wi wi-day-cloudy';
+				weather.img = 'img/SVG/8.svg';
+				break;
 			case 'tstorms':
 				weather.icon = 'wi wi-storm-showers';
 				weather.img = 'img/SVG/27.svg';
+				break;
+			case 'snow':
+				weather.icon = 'wi wi-snow';
+				weather.img = 'img/SVG/23.svg';
 				break;
 			default:
 				weather.icon = 'wi wi-na';
@@ -209,6 +211,12 @@ $(document).ready(function() {
 
 	//Weather data to show
 	var setWeather = function(localWeather) {
+
+		// check if temp img needs to change
+		var currentTempImgClass = $('#temp-img').attr('class');
+		if(currentTempImgClass !== localWeather.tempImg) {
+			$('#temp-img').removeClass(currentTempImgClass);
+		}
 
 		// title
 		$('.location-title').text(localWeather.full);
