@@ -37,7 +37,7 @@ $(document).ready(function() {
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         zoomControl: true,
         zoomControlOptions: {
-			  	position: google.maps.ControlPosition.LEFT_BOTTOM
+			  	position: google.maps.ControlPosition.LEFT_CENTER
 			  },
         mapTypeControl: false,
 			  scaleControl: false,
@@ -125,9 +125,8 @@ $(document).ready(function() {
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('wunderground.json'))
 			.then(function(location, weather) {
-
+				console.log(weather);
 				var locate = location[0].results;
-				console.log(locate);
 				// From observation - remote locations -
 				// Google will return at least two formatted address
 				if(locate.length <= 2){
@@ -137,12 +136,16 @@ $(document).ready(function() {
 				} else {
 					self.user.formatAdd = locate[3].formatted_address;
 				}
-				console.log(weather);
+
 				self.weather = {
-					main: weather[0].main,
-					desc: weather[0].weather[0],
-					wind: weather[0].wind,
-					sys: weather[0].sys
+					country: weather[0].current_observation.display_location.country,
+					full: weather[0].current_observation.display_location.full,
+					desc: weather[0].current_observation.weather,
+					main: weather[0].current_observation.icon,
+					tempFah: weather[0].current_observation.temp_f,
+					humid: weather[0].current_observation.relative_humidity.slice(0,-1),
+					windMPH: Math.round(weather[0].current_observation.wind_mph),
+					feelsLikeFah: weather[0].current_observation.feelslike_f,
 				};
 
 				checkWeather(self.user.formatAdd, self.weather);
@@ -153,67 +156,69 @@ $(document).ready(function() {
 
 	};
 
+
+
 	var checkWeather = function(location, weather) {
 
-		//All data going to be displayed needs to be in this obj
-		var localWeather = { 
-			country : weather.sys.country.toLowerCase(),
-			state : location.slice(0, -5),
-			main : weather.desc.main.toLowerCase(),
-			desc : weather.desc.description,
-			humid : weather.main.humidity,
-			wind : Math.round(2.237 * weather.wind.speed)
-		};
+		// weather = self.weather
 
-		if(localWeather.country === 'us') {
-			localWeather.temp = Math.round((weather.main.temp * 9/5) - 459.67);
-			localWeather.tempImg = 'wi wi-fahrenheit';
+		if(weather.country.toLowerCase() === 'us') {
+			weather.temp = Math.round(weather.tempFah);
+			weather.tempImg = 'wi wi-fahrenheit';
 		} else {
-			localWeather.temp = Math.round(weather.main.temp - 273.15);
-			localWeather.tempImg = 'wi wi-celsius';
+			weather.temp = Math.round((weather.temp - 32) * 5/9);
+			weather.tempImg = 'wi wi-celsius';
 		}
 
-		switch (localWeather.main) {
-			case 'clouds':
-				localWeather.icon = 'wi wi-cloudy';
-				localWeather.img = 'img/SVG/25.svg';
+		switch (weather.main.toLowerCase()) {
+			case 'partlysunny':
+			case 'partlycloudy':
+				weather.icon = 'wi wi-day-cloudy';
+				weather.img = 'img/SVG/8.svg';
+				break;
+			case 'cloudy':
+				weather.icon = 'wi wi-cloudy';
+				weather.img = 'img/SVG/25.svg';
 				break;
 			case 'clear':
-				localWeather.icon = 'wi wi-day-sunny';
-				localWeather.img = 'img/SVG/2.svg';
-				break;
-			case 'rain':
-				localWeather.icon = 'wi wi-rain';
-				localWeather.img = 'img/SVG/18.svg';
+				weather.icon = 'wi wi-day-sunny';
+				weather.img = 'img/SVG/2.svg';
 				break;
 			case 'snow':
-				localWeather.icon = 'wi wi-snow';
-				localWeather.img = 'img/SVG/23.svg';
+				weather.icon = 'wi wi-snow';
+				weather.img = 'img/SVG/23.svg';
+				break;
+			case 'rain':
+				weather.icon = 'wi wi-rain';
+				weather.img = 'img/SVG/18.svg';
+				break;
+			case 'tstorms':
+				weather.icon = 'wi wi-storm-showers';
+				weather.img = 'img/SVG/27.svg';
 				break;
 			default:
-				localWeather.icon = 'wi wi-na';
-				localWeather.img = 'img/SVG/45.svg';
+				weather.icon = 'wi wi-na';
+				weather.img = 'img/SVG/45.svg';
 		}
 		//Marker icon depends on weather api calls return value
-		initMarker(localWeather.img);
-		setWeather(localWeather);
+		initMarker(weather.img);
+		setWeather(weather);
 	};
+
 
 
 	//Weather data to show
 	var setWeather = function(localWeather) {
 
 		// title
-		$('.location-title').text(localWeather.state);
+		$('.location-title').text(localWeather.full);
 		//weather icon and temp
 		$('#weather-img').addClass(localWeather.icon);
 		$('.temp').text(localWeather.temp);
 		$('#temp-img').addClass(localWeather.tempImg);
-		//Weather description
-		$('.desc').text(localWeather.desc);
 		//wind icon and speed
 		$('#wind-img').addClass('wi wi-windy');
-		$('.speed').text(localWeather.wind + ' MPH');
+		$('.speed').text(localWeather.windMPH + ' MPH');
 		//humid icon and percent
 		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').text(localWeather.humid + ' %');
