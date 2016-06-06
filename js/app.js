@@ -6,6 +6,8 @@ $(document).ready(function() {
 	var self = this;
 
 	self.user = {};
+	// count keeps track of users weather updates
+	self.count = 0;
 	//current using open weather api
 	// wundergroundKey = 'acb24fc760a62b97';
 
@@ -51,21 +53,26 @@ $(document).ready(function() {
 
 
 	//initial a new marker
-	var initMarker = function(icon) {
-
+	var initMarker = function() {
+		// Attempt to change marker icon on new location
+		if(self.count > 0) {
+			self.marker.setMap(null);
+		}
 		//MUST USE user obj lat and lng and not maps
 		var coords = new google.maps.LatLng(self.user.lat, self.user.lng);
 
 		self.marker = new google.maps.Marker({
     			position: coords,
     			icon: {
-    				url: icon,
-    				anchor: new google.maps.Point(10, 10)
+    				url: 'img/pointer.svg',
+    				anchor: new google.maps.Point(21, 8)
     			},
     			animation: google.maps.Animation.DROP,
     			draggable: true
 
   	});
+
+		self.count++;
 
 		self.marker.setMap(self.map); 
 
@@ -174,36 +181,29 @@ $(document).ready(function() {
 		switch (weather.main.toLowerCase()) {
 			case 'clear':
 				weather.icon = 'wi wi-day-sunny';
-				weather.img = 'img/SVG/2.svg';
 				break;
 			case 'rain':
 				weather.icon = 'wi wi-rain';
-				weather.img = 'img/SVG/18.svg';
 				break;
 			case 'mostlycloudy':
 			case 'partlycloudy':
 			case 'cloudy':
 				weather.icon = 'wi wi-cloudy';
-				weather.img = 'img/SVG/25.svg';
 				break;
 			case 'partlysunny':
 				weather.icon = 'wi wi-day-cloudy';
-				weather.img = 'img/SVG/8.svg';
 				break;
 			case 'tstorms':
 				weather.icon = 'wi wi-storm-showers';
-				weather.img = 'img/SVG/27.svg';
 				break;
 			case 'snow':
 				weather.icon = 'wi wi-snow';
-				weather.img = 'img/SVG/23.svg';
 				break;
 			default:
 				weather.icon = 'wi wi-na';
-				weather.img = 'img/SVG/45.svg';
 		}
 		//Marker icon depends on weather api calls return value
-		initMarker(weather.img);
+		initMarker();
 		setWeather(weather);
 	};
 
