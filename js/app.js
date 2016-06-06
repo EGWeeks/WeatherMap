@@ -64,7 +64,7 @@ $(document).ready(function() {
 		self.marker = new google.maps.Marker({
     			position: coords,
     			icon: {
-    				url: 'img/sunny.svg',
+    				url: 'img/wundermarker.png',
     				anchor: new google.maps.Point(21, 8)
     			},
     			animation: google.maps.Animation.DROP,
