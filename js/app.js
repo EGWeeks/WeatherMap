@@ -123,7 +123,7 @@ $(document).ready(function() {
 		//return $.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
 
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('weather.json'))
+				$.get('wunderground.json'))
 			.then(function(location, weather) {
 
 				var locate = location[0].results;
