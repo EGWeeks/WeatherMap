@@ -105,13 +105,14 @@
 	z-index: 1;
 }
 
-.forecast-postion {
-	position: relative;
+.forecast-position {
 	z-index: 1;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 
-.forecast-sticky {
-	position: fixed;
+.forecast-color {
 	color: #2199e8;
 	background-color: #e6e6e6;
 }
