@@ -6,10 +6,6 @@ $(document).ready(function() {
 	var self = this;
 
 	self.user = {};
-	// count keeps track of users weather updates
-	self.count = 0;
-	//current using open weather api
-	// wundergroundKey = 'acb24fc760a62b97';
 
 	// get User Location
 	var getLocation = function() {
@@ -54,10 +50,6 @@ $(document).ready(function() {
 
 	//initial a new marker
 	var initMarker = function() {
-		// Attempt to change marker icon on new location
-		if(self.count > 0) {
-			self.marker.setMap(null);
-		}
 		//MUST USE user obj lat and lng and not maps
 		var coords = new google.maps.LatLng(self.user.lat, self.user.lng);
 
@@ -65,14 +57,12 @@ $(document).ready(function() {
     			position: coords,
     			icon: {
     				url: 'img/wundermarker.png',
-    				anchor: new google.maps.Point(21, 8)
+    				anchor: new google.maps.Point(30, 55)
     			},
     			animation: google.maps.Animation.DROP,
     			draggable: true
 
   	});
-		// increase counter after marker is set
-		self.count++;
 
 		self.marker.setMap(self.map); 
 
@@ -128,36 +118,13 @@ $(document).ready(function() {
 
 		//Weather api call
 		// $.get('wunderground.json')
-		//$.get('http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=35f88f2946668df8785d29c91312c21c');
-		//$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/q/'+lat+','+lng+'.json');
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/q/'+lat+','+lng+'.json'))
-			.then(function(location, weather) {
-				console.log(weather);
-				var locate = location[0].results;
-				// From observation - remote locations -
-				// Google will return at least two formatted address
-				if(locate.length <= 2){
-					self.user.formatAdd = locate[0].formatted_address;
-				} else if(locate.length === 3) {
-					self.user.formatAdd = locate[1].formatted_address;
-				} else {
-					self.user.formatAdd = locate[3].formatted_address;
-				}
-
-				self.weather = {
-					country: weather[0].current_observation.display_location.country,
-					full: weather[0].current_observation.display_location.full,
-					desc: weather[0].current_observation.weather,
-					main: weather[0].current_observation.icon,
-					tempFah: weather[0].current_observation.temp_f,
-					humid: weather[0].current_observation.relative_humidity.slice(0,-1),
-					windMPH: Math.round(weather[0].current_observation.wind_mph),
-					feelsLikeFah: weather[0].current_observation.feelslike_f,
-				};
-
-				checkWeather(self.user.formatAdd, self.weather);
-				
+				$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json'))
+			.then(function(location, data) {
+				console.log(data);
+	
+				checkWeather(location, data[0].current_observation);
+				checkForecast(data[0].forecast);
 			}, function(error) {
 				alert('Ehhh. This is embarassing but there seems to be a problem with receiving data right now. Error message: ' + error.statusText);
 			});
@@ -165,46 +132,75 @@ $(document).ready(function() {
 	};
 
 
-
+	// Parse current weather data that goes in TOPBAR
 	var checkWeather = function(location, weather) {
 
-		// weather = self.weather
-		console.log(weather.country.toLowerCase());
-		if(weather.country.toLowerCase() === 'us') {
-			weather.temp = Math.round(weather.tempFah);
-			weather.tempImg = 'wi wi-fahrenheit';
+		var locate = location[0].results;
+
+		// From observation - remote locations -
+		// Google will return at least two formatted address
+		if(locate.length <= 2){
+			self.user.formatAdd = locate[0].formatted_address;
+		} else if(locate.length === 3) {
+			self.user.formatAdd = locate[1].formatted_address;
 		} else {
-			weather.temp = Math.round((weather.tempFah - 32) * 5/9);
-			weather.tempImg = 'wi wi-celsius';
+			self.user.formatAdd = locate[3].formatted_address;
 		}
-		console.log(weather.tempImg);
-		switch (weather.main.toLowerCase()) {
+		// Parse current weather data
+		self.weather = {
+			country: weather.display_location.country,
+			full: weather.display_location.full,
+			desc: weather.weather,
+			main: weather.icon,
+			tempFah: weather.temp_f,
+			humid: weather.relative_humidity.slice(0,-1),
+			windMPH: Math.round(weather.wind_mph),
+			feelsLikeFah: weather.feelslike_f
+		};
+
+		// weather = self.weather
+		if(self.weather.country.toLowerCase() === 'us') {
+			self.weather.temp = Math.round(self.weather.tempFah);
+			self.weather.tempImg = 'wi wi-fahrenheit';
+		} else {
+			self.weather.temp = Math.round((self.weather.tempFah - 32) * 5/9);
+			self.weather.tempImg = 'wi wi-celsius';
+		}
+
+		switch (self.weather.main.toLowerCase()) {
 			case 'clear':
-				weather.icon = 'wi wi-day-sunny';
+				self.weather.icon = 'wi wi-day-sunny';
 				break;
 			case 'rain':
-				weather.icon = 'wi wi-rain';
+				self.weather.icon = 'wi wi-rain';
 				break;
 			case 'mostlycloudy':
 			case 'partlycloudy':
 			case 'cloudy':
-				weather.icon = 'wi wi-cloudy';
+				self.weather.icon = 'wi wi-cloudy';
 				break;
 			case 'partlysunny':
-				weather.icon = 'wi wi-day-cloudy';
+				self.weather.icon = 'wi wi-day-cloudy';
 				break;
 			case 'tstorms':
-				weather.icon = 'wi wi-storm-showers';
+				self.weather.icon = 'wi wi-storm-showers';
 				break;
 			case 'snow':
-				weather.icon = 'wi wi-snow';
+				self.weather.icon = 'wi wi-snow';
 				break;
 			default:
-				weather.icon = 'wi wi-na';
+				self.weather.icon = 'wi wi-na';
 		}
 		//Marker icon depends on weather api calls return value
 		initMarker();
-		setWeather(weather);
+
+		setWeather(self.weather);
+	};
+
+
+	// Parse forecasted Data
+	var checkForecast = function(forecast) {
+		console.log(forecast);
 	};
 
 
