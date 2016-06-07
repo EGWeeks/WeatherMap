@@ -212,13 +212,15 @@ $(document).ready(function() {
 	// Parse forecasted Data
 	var checkForecast = function(forecast) {
 		self.forecast = [];
-
+		console.log(forecast);
 		//Loop & Parse forecastsimple prop to get relevant data
 		forecast.forEach(function(day) {
 			var daily = {
 				weekday : day.date.weekday_short,
 				conditions : day.conditions,
-				iconDesc : day.icon
+				iconDesc : day.icon,
+				pop : day.pop,
+				qpfAllday : day.qpf_allday.in
 			};
 			// convert temp if nessecary
 			if(self.weather.country.toLowerCase() === 'us') {
@@ -298,10 +300,11 @@ $(document).ready(function() {
 		localForecast.forEach(function(day, index) {
 			$('.day-title-' + index).text(day.weekday);
 			$('#forecast-img-' + index).addClass(day.icon);
-			$('.forecast-desc-' + index).text(day.conditions);
 			$('.forecast-high-' + index).text(day.high);
 			$('.forecast-high-' + index).after(' | ');
 			$('.forecast-low-' + index).text(day.low);
+			$('.pop-' + index).addClass('wi wi-raindrops').text(' ' + day.pop + ' %');
+			$('.qpf-' + index).addClass('wi wi-raindrop').text(' ' + day.qpfAllday + ' in');
 		});
 
 	};
