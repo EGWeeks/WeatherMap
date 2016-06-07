@@ -7,6 +7,9 @@ $(document).ready(function() {
 
 	self.user = {};
 
+
+
+
 	// get User Location
 	var getLocation = function() {
 		try {
@@ -23,6 +26,7 @@ $(document).ready(function() {
 			alert('Ehhh... Looks like there is a problem getting your current location. Here is the Error: ' + e);
 		}
 	};
+
 
 
 
@@ -48,6 +52,7 @@ $(document).ready(function() {
 
 
 
+
 	//initial a new marker
 	var initMarker = function() {
 		//MUST USE user obj lat and lng and not maps
@@ -68,6 +73,7 @@ $(document).ready(function() {
 
 		markerListener(self.marker);
 	};
+
 
 
 
@@ -113,23 +119,27 @@ $(document).ready(function() {
 
 
 
+
 	//Calls reverse geocode and weather api
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
-		// $.get('wunderground.json')
+		// 
+		// $.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json')
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json'))
+				$.get('wunderground.json'))
 			.then(function(location, data) {
-				console.log(data);
+				console.log(data[0].forecast.simpleforecast);
 	
 				checkWeather(location, data[0].current_observation);
-				checkForecast(data[0].forecast);
+				checkForecast(data[0].forecast.simpleforecast.forecastday);
 			}, function(error) {
 				alert('Ehhh. This is embarassing but there seems to be a problem with receiving data right now. Error message: ' + error.statusText);
 			});
 
 	};
+
+
 
 
 	// Parse current weather data that goes in TOPBAR
@@ -198,10 +208,64 @@ $(document).ready(function() {
 	};
 
 
+
+
 	// Parse forecasted Data
 	var checkForecast = function(forecast) {
-		console.log(forecast);
+		self.forecast = [];
+
+		//Loop & Parse forecastsimple prop to get relevant data
+		forecast.forEach(function(day) {
+			var daily = {
+				conditions : day.conditions,
+				high : day.high.fahrenheit,
+				iconDesc : day.icon,
+				low : day.low.fahrenheit,
+			};
+			// convert temp if nessecary
+			if(self.weather.country.toLowerCase() === 'us') {
+				daily.high = Math.round(day.high.fahrenheit);
+				daily.low = Math.round(day.low.fahrenheit);
+			} else {
+				//convert to celsius
+				daily.high = Math.round((day.high.fahrenheit - 32) * 5/9);
+				daily.low = Math.round((day.low.fahrenheit - 32) * 5/9);
+
+			}
+			// Determine icon
+			switch (daily.iconDesc.toLowerCase()) {
+				case 'clear':
+					daily.icon = 'wi wi-day-sunny';
+					break;
+				case 'rain':
+					daily.icon = 'wi wi-rain';
+					break;
+				case 'mostlycloudy':
+				case 'partlycloudy':
+				case 'cloudy':
+					daily.icon = 'wi wi-cloudy';
+					break;
+				case 'partlysunny':
+					daily.icon = 'wi wi-day-cloudy';
+					break;
+				case 'tstorms':
+				case 'chancetstorms':
+					daily.icon = 'wi wi-storm-showers';
+					break;
+				case 'snow':
+				case 'chancesnow':
+					daily.icon = 'wi wi-snow';
+					break;
+				default:
+					daily.icon = 'wi wi-na';
+			}
+			self.forecast.push(daily);
+		});
+
+		console.log(self.forecast);
+		setForecast(self.forecast);
 	};
+
 
 
 
@@ -227,6 +291,16 @@ $(document).ready(function() {
 		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').text(localWeather.humid + ' %');
 	};
+
+
+
+
+	// Forecast data to show
+	var setForecast = function(localForecast) {
+		
+	};
+
+
 
 
 	//Check if app has access to user location
