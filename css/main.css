@@ -106,9 +106,11 @@
 }
 
 .forecast {
-	position: relative;
-	z-index: 1;
+	color: #2199e8;
 	background-color: #e6e6e6;
+	position: relative;
+	margin-right: -1rem;
+	z-index: 1;
 }
 
 /*** Update Weather button ***/

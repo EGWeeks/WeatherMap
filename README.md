@@ -6,5 +6,5 @@ The user interface has a basic design to give the user the essential information
 
 Current updating WD with wunderground api for more reliable and current forecasting conditons.
 
-![weather drop screen shot](/img/screenshot.png)
+![weather drop screen shot](/img/screenshoot2.png)
 
