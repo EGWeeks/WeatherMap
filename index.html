@@ -44,99 +44,36 @@
 			<a href='#' class='update-button display-none large button'>Local Weather</a>
 		</div>
 	</div>
-	<div class='row'>
-		<div class='large-3 small-12 columns'>
-		</div>
-		<div class='large-4 small-12 columns'>
-		</div>
-		<div class='large-5 small-12 columns'>
-			<!-- <div class='row forecast'>
-				<div class='large-3 small-3 columns text-center'>
-					<h5 class='day-title-0'></h5>
-					<i id='forecast-img-0' class=''></i>
-					<p class='forecast-desc-0'></p>
-					<p><span class='forecast-high-0'></span><span class='forecast-low-0'></span></p>
-				</div>
-				<div class='large-3 small-3 columns text-center'>
-					<h5 class='day-title-1'></h5>
-					<i id='forecast-img-1' class=''></i>
-					<p class='forecast-desc-1'></p>
-					<p><span class='forecast-high-1'></span><span class='forecast-low-1'></span></p>
-				</div>
-				<div class='large-3 small-3 columns text-center'>
-					<h5 class='day-title-2'></h5>
-					<i id='forecast-img-2' class=''></i>
-					<p class='forecast-desc-2'></p>
-					<p><span class='forecast-high-2'></span><span class='forecast-low-2'></span></p>
-				</div>
-				<div class='large-3 small-3 columns text-center'>
-					<h5 class='day-title-3'></h5>
-					<i id='forecast-img-3' class=''></i>
-					<p class='forecast-desc-3'></p>
-					<p><span class='forecast-high-3'></span><span class='forecast-low-3'></span></p>
-				</div>
-			</div> -->
-			<div class='forecast'>
-				<div class='row'>
-					<div class='large-3 small-3 columns text-center'>
-						<h5 class='day-title-0'></h5>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<h5 class='day-title-1'></h5>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<h5 class='day-title-2'></h5>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<h5 class='day-title-3'></h5>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='large-3 small-3 columns text-center'>
-						<i id='forecast-img-0' class=''></i>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<i id='forecast-img-1' class=''></i>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<i id='forecast-img-2' class=''></i>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<i id='forecast-img-3' class=''></i>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='large-3 small-3 columns text-center'>
-						<p class='forecast-desc-0'></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p class='forecast-desc-1'></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p class='forecast-desc-2'></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p class='forecast-desc-3'></p>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='large-3 small-3 columns text-center'>
-						<p><span class='forecast-high-0'></span><span class='forecast-low-3'></span></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p><span class='forecast-high-1'></span><span class='forecast-low-3'></span></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p><span class='forecast-high-2'></span><span class='forecast-low-3'></span></p>
-					</div>
-					<div class='large-3 small-3 columns text-center'>
-						<p><span class='forecast-high-3'></span><span class='forecast-low-3'></span></p>
-					</div>
-				</div>
+
+	<div id='map'>
+	</div>
+	<div class='row forecast-postion' data-sticky-container>
+		<div class='forecast-sticky' data-sticky data-stick-to='bottom' data-btm-anchor=''>
+			<div class='large-3 small-3 columns text-center'>
+				<h5 class='day-title-0'></h5>
+				<i id='forecast-img-0' class=''></i>
+				<p class='forecast-desc-0'></p>
+				<p><span class='forecast-high-0'></span><span class='forecast-low-0'></span></p>
+			</div>
+			<div class='large-3 small-3 columns text-center'>
+				<h5 class='day-title-1'></h5>
+				<i id='forecast-img-1' class=''></i>
+				<p class='forecast-desc-1'></p>
+				<p><span class='forecast-high-1'></span><span class='forecast-low-1'></span></p>
+			</div>
+			<div class='large-3 small-3 columns text-center'>
+				<h5 class='day-title-2'></h5>
+				<i id='forecast-img-2' class=''></i>
+				<p class='forecast-desc-2'></p>
+				<p><span class='forecast-high-2'></span><span class='forecast-low-2'></span></p>
+			</div>
+			<div class='large-3 small-3 columns text-center'>
+				<h5 class='day-title-3'></h5>
+				<i id='forecast-img-3' class=''></i>
+				<p class='forecast-desc-3'></p>
+				<p><span class='forecast-high-3'></span><span class='forecast-low-3'></span></p>
 			</div>
 		</div>
-	</div>
-	<div id='map'>
 	</div>
 	<script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
 	<script type='text/javascript' src='js/foundation.min.js'></script>
