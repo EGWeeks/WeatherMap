@@ -129,7 +129,6 @@ $(document).ready(function() {
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('wunderground.json'))
 			.then(function(location, data) {
-				console.log(data[0].forecast.simpleforecast);
 	
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
@@ -217,10 +216,9 @@ $(document).ready(function() {
 		//Loop & Parse forecastsimple prop to get relevant data
 		forecast.forEach(function(day) {
 			var daily = {
+				weekday : day.date.weekday_short,
 				conditions : day.conditions,
-				high : day.high.fahrenheit,
-				iconDesc : day.icon,
-				low : day.low.fahrenheit,
+				iconDesc : day.icon
 			};
 			// convert temp if nessecary
 			if(self.weather.country.toLowerCase() === 'us') {
@@ -262,7 +260,6 @@ $(document).ready(function() {
 			self.forecast.push(daily);
 		});
 
-		console.log(self.forecast);
 		setForecast(self.forecast);
 	};
 
@@ -297,7 +294,16 @@ $(document).ready(function() {
 
 	// Forecast data to show
 	var setForecast = function(localForecast) {
-		
+
+		localForecast.forEach(function(day, index) {
+			$('.day-title-' + index).text(day.weekday);
+			$('#forecast-img-' + index).addClass(day.icon);
+			$('.forecast-desc-' + index).text(day.conditions);
+			$('.forecast-high-' + index).text(day.high);
+			$('.forecast-high-' + index).after(' | ');
+			$('.forecast-low-' + index).text(day.low);
+		});
+
 	};
 
 
