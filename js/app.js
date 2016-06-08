@@ -303,13 +303,15 @@ $(document).ready(function() {
 			$('.forecast-high-' + index).text(day.high);
 			$('.forecast-high-' + index).after(' | ');
 			$('.forecast-low-' + index).text(day.low);
-			$('.pop-' + index).addClass('wi wi-raindrops').text(' ' + day.pop + ' %');
-			$('.qpf-' + index).addClass('wi wi-raindrop').text(' ' + day.qpfAllday + ' in');
+			$('.pop-' + index).addClass('wi wi-raindrops').text(' ' + day.pop + '%');
+			$('.qpf-' + index).addClass('wi wi-raindrop').text(' ' + day.qpfAllday + 'in');
 		});
-
+		// setChart();
 	};
 
-
+	var setChart = function() {
+		
+	};
 
 
 	//Check if app has access to user location
