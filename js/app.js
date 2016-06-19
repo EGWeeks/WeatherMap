@@ -372,7 +372,24 @@ $(document).ready(function() {
 				}
 		};
 		var lineChart = new Chart(ctx, chartData);
+
+		hourlyChartListener();
 	};
+
+
+
+	// Hourly button listener to show and hide hourly data
+	var hourlyChartListener = function() {
+		$('.hourly-temp-button').click(function() {
+			$('.hourly-temp-button').removeClass('fade-in-animation').addClass('fade-out-left');
+			setTimeout(function(){
+					$('.hourly-temp-button').addClass('display-none');
+					$('.hourly-data').removeClass('display-none').addClass('fade-in-animation');
+				}, 1000);
+		});
+	};
+
+
 
 
 	//Check if app has access to user location
