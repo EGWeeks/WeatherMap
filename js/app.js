@@ -132,6 +132,7 @@ $(document).ready(function() {
 	
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
+				checkHourlyForecast(data[0].hourly_forecast);
 			}, function(error) {
 				alert('Ehhh. This is embarassing but there seems to be a problem with receiving data right now. Error message: ' + error.statusText);
 			});
@@ -212,7 +213,6 @@ $(document).ready(function() {
 	// Parse forecasted Data
 	var checkForecast = function(forecast) {
 		self.forecast = [];
-		console.log(forecast);
 		//Loop & Parse forecastsimple prop to get relevant data
 		forecast.forEach(function(day) {
 			var daily = {
@@ -268,6 +268,34 @@ $(document).ready(function() {
 
 
 
+	// Parse Hourly forecasted weather
+	var checkHourlyForecast = function(hourlyForecast) {
+		self.hourly = [];
+		var typeOfData;
+		var times = [];
+		var temp = [];
+
+		// Grab english if in us or metric if not
+		if(self.weather.country.toLowerCase() === 'us') {
+			typeOfData = 'english';
+		} else {
+			typeOfData = 'metric';
+		}
+
+		hourlyForecast.forEach(function(hour) {
+			times.push(hour.FCTTIME.civil);
+			temp.push(hour.temp[typeOfData]);
+
+		});
+
+		self.hourly.push(times, temp);
+
+		setHourlyChart(self.hourly);
+	};
+
+
+
+
 	//Weather data to show
 	var setWeather = function(localWeather) {
 
@@ -309,8 +337,41 @@ $(document).ready(function() {
 		// setChart();
 	};
 
-	var setChart = function() {
-		
+
+
+
+	// Hourly forecast data to show
+	var setHourlyChart = function(hours) {
+
+		var ctx = $('#hourlyChart');
+
+		var chartData = {
+				type: 'line',
+				data: {
+					labels: hours[0],
+					datasets: [
+						{
+							label: 'temp',
+							fillColor: "rgba(220,220,220,0.2)",
+				      strokeColor: "rgba(220,190,220,1)",
+				      pointColor: "#2199e8",
+				      pointStrokeColor: "#fff",
+				      pointHighlightFill: "#fff",
+				      pointHighlightStroke: "rgba(220,220,220,1)",
+							data: hours[1]
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					fontSize : 5,
+					pointLabelFontSize: 45,
+					tooltips : {
+						titleFontSize: 50
+					}
+				}
+		};
+		var lineChart = new Chart(ctx, chartData);
 	};
 
 

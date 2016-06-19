@@ -162,3 +162,11 @@
 	left: 0;
 	height: 100vh;
 }
+
+/*** Hourly graphs ***/
+
+.hourly-data {
+	display: none;
+	background-color: #e6e6e6; 
+}
+
