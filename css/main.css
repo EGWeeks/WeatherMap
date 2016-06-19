@@ -178,6 +178,7 @@
 /*** Hourly graphs ***/
 
 .hourly-data {
-	background-color: #e6e6e6; 
+	background-color: #e6e6e6;
+	padding: 0 1rem;
 }
 

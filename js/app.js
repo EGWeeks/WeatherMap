@@ -352,26 +352,20 @@ $(document).ready(function() {
 					datasets: [
 						{
 							label: 'temp',
-							fillColor: "rgba(220,220,220,0.2)",
-				      strokeColor: "rgba(220,190,220,1)",
-				      pointColor: "#2199e8",
-				      pointStrokeColor: "#fff",
-				      pointHighlightFill: "#fff",
-				      pointHighlightStroke: "rgba(220,220,220,1)",
+							backgroundColor: 'rgba(255, 255, 255, 0.6)',
 							data: hours[1]
 						}
 					]
 				},
 				options: {
 					responsive: true,
-					fontSize : 5,
-					pointLabelFontSize: 45,
 					tooltips : {
-						titleFontSize: 50
+						titleFontSize: 15,
+						bodyFontSize: 25
 					}
 				}
 		};
-		var lineChart = new Chart(ctx, chartData);
+		new Chart(ctx, chartData);
 
 		hourlyChartListener();
 	};
@@ -385,7 +379,7 @@ $(document).ready(function() {
 			setTimeout(function(){
 					$('.hourly-temp-button').addClass('display-none');
 					$('.hourly-data').removeClass('display-none').addClass('fade-in-animation');
-				}, 1000);
+				}, 500);
 		});
 	};
 
