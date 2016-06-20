@@ -97,7 +97,14 @@
 	}
 }
 
+/*** topbar info ***/
+.menu a:hover {
+	color: #2199e8;
+}
 
+.menu a:focus {
+	color: #2199e8;
+}
 
 /*** Mobile title bar ***/
 .title-bar {
@@ -176,7 +183,7 @@
 	margin-left: 0;
 }
 
-#hourly-temp, #hourly-precip {
+#hourly-temp, #hourly-precip, #hourly-close {
 	width: 100%;
 }
 
@@ -184,6 +191,14 @@
 	background-color:red;
 }
 
+#hourly-close {
+	background-color: black;
+}
+
+.button-group {
+	margin-top: 0.5rem;
+	margin-bottom: 0;
+}
 
 /*** Map ***/
 

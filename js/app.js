@@ -328,10 +328,12 @@ $(document).ready(function() {
 			$('.day-title-' + index).text(day.weekday);
 			$('#forecast-img-' + index).addClass(day.icon);
 			$('.forecast-high-' + index).text(day.high);
-			$('.forecast-high-' + index).after(' | ');
-			$('.forecast-low-' + index).text(day.low);
+			$('.forecast-low-' + index).text(' | ' + day.low);
 			$('.pop-' + index).addClass('wi wi-raindrops').text(' ' + day.pop + '%');
 			$('.qpf-' + index).addClass('wi wi-raindrop').text(' ' + day.qpfAllday + 'in');
+
+			// set and show button when is returned
+			$('#hourly-temp, #hourly-precip, #hourly-close').addClass('button');
 		});
 		// setChart();
 	};
@@ -375,12 +377,18 @@ $(document).ready(function() {
 			type: 'line',
 			data: {
 				labels: hours[0],
-				datasets_Y1: [{
-						label: 'Hourly Precipitation',
+				datasets: [
+					{
+						pointBackgroundColor: 'rgba(0,0,0,0.6)',
+						borderColor: 'rgba(0, 0, 0, 0.6)',
+						label: 'Potential Amount of Precip',
 						data: hours[2],
 						yAxisID: 'y-axis-1'
-					}],
-					datasets_Y2: [{
+					},
+					{
+						borderColor: '#2199e8',
+						backgroundColor: 'rgba(0,73,175,0.6)',
+						label: 'Chance of Precip',
 						data: hours[3],
 						yAxisID: 'y-axis-2'
 					}]
@@ -391,6 +399,29 @@ $(document).ready(function() {
 				tooltips: {
 					titleFontSize: 15,
 					bodyFontSize: 25
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						gridLines: {
+							offsetGridLines: false
+						}
+					}],
+					yAxes: [{
+						type: 'linear',
+						display: true,
+						position: 'left',
+						id: 'y-axis-1',
+					}, {
+						type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: "right",
+            id: "y-axis-2",
+
+            gridLines: {
+            	drawOnChartArea: false
+            }
+					}]
 				}
 			}
 		};
@@ -403,12 +434,48 @@ $(document).ready(function() {
 
 	// Hourly button listener to show and hide hourly data
 	var hourlyChartListener = function() {
+		var precipGraph = $('#hourly-precip-graph');
+		var tempGraph = $('#hourly-temp-graph');
+
+		// temp button listener
 		$('.hourly-temp-button').click(function() {
-			$('#hourly-temp-graph').removeClass('display-none').addClass('fade-in-animation');
+			tempGraph.removeClass('fade-out-left');
+			if(precipGraph.hasClass('fade-in-animation')) {
+				precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+
+				setTimeout(function() {
+					precipGraph.addClass('display-none');
+					tempGraph.removeClass('display-none').addClass('fade-in-animation');
+				}, 500);
+
+			}else {
+				tempGraph.removeClass('display-none').addClass('fade-in-animation');
+			}
 		});
 
+		// precip button listener
 		$('.hourly-precip-button').click(function(){
-			$('#hourly-precip-graph').removeClass('display-none').addClass('fade-in-animation');
+			precipGraph.removeClass('fade-out-left');
+			if(tempGraph.hasClass('fade-in-animation')) {
+				tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+
+				setTimeout(function() {
+					tempGraph.addClass('display-none');
+					precipGraph.removeClass('display-none').addClass('fade-in-animation');
+				}, 500);
+			} else {
+				precipGraph.removeClass('display-none').addClass('fade-in-animation');
+			}
+		});
+
+		// close button listener
+		$('#hourly-close').click(function(){
+			tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+			precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+			setTimeout(function(){
+				tempGraph.addClass('display-none');
+				precipGraph.addClass('display-none');
+			}, 500);
 		});
 	};
 

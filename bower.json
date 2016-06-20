@@ -17,6 +17,6 @@
   "dependencies": {
     "animate.css": "animate-css#^3.5.1",
     "jquery": "2.2.4",
-    "Chart.js": "~2.1.4"
+    "Chart.js": "2.1.4"
   }
 }
