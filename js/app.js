@@ -124,7 +124,6 @@ $(document).ready(function() {
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
-		// 
 		// $.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json')
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('wunderground.json'))
@@ -272,9 +271,7 @@ $(document).ready(function() {
 	var checkHourlyForecast = function(hourlyForecast) {
 		self.hourly = [];
 		var typeOfData;
-		var times = [];
-		var temp = [];
-
+		var times = [], temp = [], pop = [], qpf = [];
 		// Grab english if in us or metric if not
 		if(self.weather.country.toLowerCase() === 'us') {
 			typeOfData = 'english';
@@ -285,10 +282,12 @@ $(document).ready(function() {
 		hourlyForecast.forEach(function(hour) {
 			times.push(hour.FCTTIME.civil);
 			temp.push(hour.temp[typeOfData]);
+			qpf.push(hour.qpf[typeOfData]);
+			pop.push(hour.pop);
 
 		});
 
-		self.hourly.push(times, temp);
+		self.hourly.push(times, temp, qpf, pop);
 
 		setHourlyChart(self.hourly);
 	};
@@ -342,17 +341,19 @@ $(document).ready(function() {
 
 	// Hourly forecast data to show
 	var setHourlyChart = function(hours) {
+		console.log(hours);
+		// Hourly temp Graph Config
+		var htg = $('#hourly-temp-graph');
 
-		var ctx = $('#hourlyChart');
-
-		var chartData = {
+		var tempData = {
 				type: 'line',
 				data: {
 					labels: hours[0],
 					datasets: [
 						{
-							label: 'temp',
+							label: 'Hourly Temperature',
 							backgroundColor: 'rgba(255, 255, 255, 0.6)',
+							pointBackgroundColor: '#ff0000',
 							data: hours[1]
 						}
 					]
@@ -365,7 +366,35 @@ $(document).ready(function() {
 					}
 				}
 		};
-		new Chart(ctx, chartData);
+		new Chart(htg, tempData);
+
+		// Hourly precip Graph Config
+		var hpg = $('#hourly-precip-graph');
+
+		var precipData = {
+			type: 'line',
+			data: {
+				labels: hours[0],
+				datasets_Y1: [{
+						label: 'Hourly Precipitation',
+						data: hours[2],
+						yAxisID: 'y-axis-1'
+					}],
+					datasets_Y2: [{
+						data: hours[3],
+						yAxisID: 'y-axis-2'
+					}]
+			},
+			options: {
+				responsive: true,
+				stacked: false,
+				tooltips: {
+					titleFontSize: 15,
+					bodyFontSize: 25
+				}
+			}
+		};
+		new Chart(hpg, precipData);
 
 		hourlyChartListener();
 	};
@@ -375,11 +404,11 @@ $(document).ready(function() {
 	// Hourly button listener to show and hide hourly data
 	var hourlyChartListener = function() {
 		$('.hourly-temp-button').click(function() {
-			$('.hourly-temp-button').removeClass('fade-in-animation').addClass('fade-out-left');
-			setTimeout(function(){
-					$('.hourly-temp-button').addClass('display-none');
-					$('.hourly-data').removeClass('display-none').addClass('fade-in-animation');
-				}, 500);
+			$('#hourly-temp-graph').removeClass('display-none').addClass('fade-in-animation');
+		});
+
+		$('.hourly-precip-button').click(function(){
+			$('#hourly-precip-graph').removeClass('display-none').addClass('fade-in-animation');
 		});
 	};
 

@@ -39,7 +39,7 @@
 		    </ul>
 		  </div>
 		</div>
-		<!-- Button -->
+		<!-- Update Weather info Button -->
 		<div class='row large-12 small-12 text-center'>
 			<a href='#' class='update-button display-none large button'>Click For Weather Update!</a>
 		</div>
@@ -48,12 +48,16 @@
 	<div id='map'>
 	</div>
 	<div class='forecast-position'>
-		<div class='row text-center'>
-			<a href='#' class='hourly-temp-button large button animated'>Hourly</a>
+		<!-- Hourly Graphs -->
+		<div class='row hourly-data'>
+			<div class='large-12 small-12 columns'>
+				<canvas id="hourly-temp-graph" class='display-none' width='800' height='141'></canvas>
+			</div>
+			<div class='large-12 small-12 columns'>
+				<canvas id="hourly-precip-graph" class='display-none' width='800' height='141'></canvas>
+			</div>
 		</div>
-		<div class='row hourly-data  display-none'>
-			<canvas id="hourlyChart" width='800' height='141'></canvas>
-		</div>
+		<!-- Daily Forecast -->
 		<div class='row forecast-color'>
 			<div class='large-3 small-3 columns text-center'>
 				<h5 class='day-title-0'></h5>
@@ -73,11 +77,19 @@
 				<p class='forecast-temp'><span class='forecast-high forecast-high-2'></span><span class='forecast-low-2'></span></p>
 				<p class='pop-qpf'><span class='pop-2'></span> <span class='qpf-2'></span></p>
 			</div>
-			<div class='large-3 small-3 columns text-center'>
+			<div class='large-2 small-3 columns text-center'>
 				<h5 class='day-title-3'></h5>
 				<i id='forecast-img-3' class='forecast-img'></i>
 				<p class='forecast-temp'><span class='forecast-high forecast-high-3'></span><span class='forecast-low-3'></span></p>
 				<p class='pop-qpf'><span class='pop-3'></span> <span class='qpf-3'></span></p>
+			</div>
+			<!-- Hourly buttons -->
+			<div class='large-1 small-12 columns text-center'>
+				<h4 id='hourly-title'>Hourly</h4>
+				<ul class='stack button-group text-center graph-buttons'>
+					<li><a href="#" class="button hourly-temp-button" id='hourly-temp'>Temp</a></li>
+					<li><a href="#" class="button hourly-precip-button" id='hourly-precip'>Precip</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>

@@ -97,6 +97,8 @@
 	}
 }
 
+
+
 /*** Mobile title bar ***/
 .title-bar {
 	background: #e6e6e6;
@@ -118,6 +120,8 @@
 	width: 100%;
 }
 
+
+
 /*** Forecast weather ***/
 
 .forecast-color {
@@ -134,6 +138,9 @@
 	font-size: 1.25rem;
 }
 
+#hourly-title {
+	color: black;
+}
 
 
 /****** buttons ********/
@@ -141,6 +148,7 @@
 .button {
 	margin-bottom: 0;
 }
+
 /*** Update Weather button ***/
 
 .display-none {
@@ -160,6 +168,20 @@
 .fade-out-left {
 	-webkit-animation: fadeOutLeftBig 1s;
   animation: fadeOutLeftBig 1s;
+}
+
+/*** graph buttons ***/
+
+.graph-buttons {
+	margin-left: 0;
+}
+
+#hourly-temp, #hourly-precip {
+	width: 100%;
+}
+
+#hourly-temp {
+	background-color:red;
 }
 
 
