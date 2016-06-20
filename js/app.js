@@ -124,11 +124,12 @@ $(document).ready(function() {
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
-		// $.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json')
+		//$.get('wunderground.json')
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('wunderground.json'))
+				$.get('http://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json'))
 			.then(function(location, data) {
-	
+				console.log(data[0].current_observation);
+				console.log(data[0].forecast.simpleforecast.forecastday);
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
 				checkHourlyForecast(data[0].hourly_forecast);
@@ -180,6 +181,7 @@ $(document).ready(function() {
 			case 'clear':
 				self.weather.icon = 'wi wi-day-sunny';
 				break;
+			case 'chancerain':
 			case 'rain':
 				self.weather.icon = 'wi wi-rain';
 				break;
@@ -194,6 +196,7 @@ $(document).ready(function() {
 			case 'tstorms':
 				self.weather.icon = 'wi wi-storm-showers';
 				break;
+			case 'chancesnow':
 			case 'snow':
 				self.weather.icon = 'wi wi-snow';
 				break;
@@ -236,6 +239,7 @@ $(document).ready(function() {
 				case 'clear':
 					daily.icon = 'wi wi-day-sunny';
 					break;
+				case 'chancerain':
 				case 'rain':
 					daily.icon = 'wi wi-rain';
 					break;
@@ -289,7 +293,7 @@ $(document).ready(function() {
 
 		self.hourly.push(times, temp, qpf, pop);
 
-		setHourlyChart(self.hourly);
+		setCanvas();
 	};
 
 
@@ -338,12 +342,22 @@ $(document).ready(function() {
 		// setChart();
 	};
 
+	var setCanvas = function() {
+		//if marker is moved
+		// remove previous graph canvas tags
+		$('#hourly-temp-graph').remove();
+		$('#hourly-precip-graph').remove();
+		// append new canvas elements
+		$('.hourly-temp-container').append('<canvas id="hourly-temp-graph" class="display-none" width="800" height="141"></canvas>')
+		$('.hourly-temp-container').append('<canvas id="hourly-precip-graph" class="display-none" width="800" height="141"></canvas>')
 
+		setHourlyChart(self.hourly);
+	};
 
 
 	// Hourly forecast data to show
 	var setHourlyChart = function(hours) {
-		console.log(hours);
+		$('').remove()
 		// Hourly temp Graph Config
 		var htg = $('#hourly-temp-graph');
 
