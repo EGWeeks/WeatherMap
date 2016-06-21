@@ -128,8 +128,6 @@ $(document).ready(function() {
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
 				$.get('https://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json'))
 			.then(function(location, data) {
-				console.log(data[0].current_observation);
-				console.log(data[0].forecast.simpleforecast.forecastday);
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
 				checkHourlyForecast(data[0].hourly_forecast);
