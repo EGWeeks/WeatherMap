@@ -97,6 +97,39 @@
 	}
 }
 
+
+/*** loading layer ***/
+
+.loading-layer {
+	z-index: 2;
+	background-color: rgb(0, 137, 232);
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.desc-loader {
+	font-weight: bold;
+	color: white;
+	position: absolute;
+	top: 40%;
+	left: 40%;
+}
+
+#rain-drop-loader {
+	font-size: 100px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+.fade-out-loader {
+	-webkit-animation: fadeOut 1s;
+  animation: fadeOut 1s;
+}
+
 /*** topbar info ***/
 .menu a:hover {
 	color: #2199e8;
@@ -106,7 +139,10 @@
 	color: #2199e8;
 }
 
+
+
 /*** Mobile title bar ***/
+
 .title-bar {
 	background: #e6e6e6;
 	color: #2199e8;
@@ -150,11 +186,14 @@
 }
 
 
+
 /****** buttons ********/
 
 .button {
 	margin-bottom: 0;
 }
+
+
 
 /*** Update Weather button ***/
 
@@ -200,6 +239,8 @@
 	margin-bottom: 0;
 }
 
+
+
 /*** Map ***/
 
 #map {
@@ -210,6 +251,7 @@
 	left: 0;
 	height: 100vh;
 }
+
 
 
 /*** Hourly graphs ***/

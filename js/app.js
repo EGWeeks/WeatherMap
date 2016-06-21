@@ -299,7 +299,6 @@ $(document).ready(function() {
 
 	//Weather data to show
 	var setWeather = function(localWeather) {
-
 		// check if temp img needs to change
 		var currentTempImgClass = $('#temp-img').attr('class');
 		if(currentTempImgClass !== localWeather.tempImg) {
@@ -337,20 +336,30 @@ $(document).ready(function() {
 			// set and show button when is returned
 			$('#hourly-temp, #hourly-precip, #hourly-close').addClass('button');
 		});
-		// setChart();
+
+		// remove loading layer
+		$('.loading-layer').addClass('fade-out-loader');
+		setTimeout(function(){
+			$('.loading-layer').remove();
+		}, 1000);
 	};
 
+
+
+
 	var setCanvas = function() {
-		//if marker is moved
+		// if marker is moved
 		// remove previous graph canvas tags
 		$('#hourly-temp-graph').remove();
 		$('#hourly-precip-graph').remove();
 		// append new canvas elements
-		$('.hourly-temp-container').append('<canvas id="hourly-temp-graph" class="display-none" width="800" height="141"></canvas>')
-		$('.hourly-temp-container').append('<canvas id="hourly-precip-graph" class="display-none" width="800" height="141"></canvas>')
+		$('.hourly-temp-container').append('<canvas id="hourly-temp-graph" class="display-none" width="800" height="141"></canvas>');
+		$('.hourly-temp-container').append('<canvas id="hourly-precip-graph" class="display-none" width="800" height="141"></canvas>');
 
 		setHourlyChart(self.hourly);
 	};
+
+
 
 
 	// Hourly forecast data to show
@@ -441,6 +450,7 @@ $(document).ready(function() {
 
 		hourlyChartListener();
 	};
+
 
 
 
