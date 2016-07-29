@@ -460,45 +460,53 @@ $(document).ready(function() {
 		// temp button listener
 		$('.hourly-temp-button').click(function() {
 			tempGraph.removeClass('fade-out-left');
-			if(precipGraph.hasClass('fade-in-animation')) {
-				precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
 
-				setTimeout(function() {
-					precipGraph.addClass('display-none');
+			if(tempGraph.hasClass('fade-in-animation')){
+				tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+				displayNoneTimeOut(tempGraph);
+			} else {
+				if(precipGraph.hasClass('fade-in-animation')) {
+					precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+
+					displayNoneTimeOut(precipGraph, tempGraph);
+				}else {
 					tempGraph.removeClass('display-none').addClass('fade-in-animation');
-				}, 500);
-
-			}else {
-				tempGraph.removeClass('display-none').addClass('fade-in-animation');
+				}
 			}
 		});
 
 		// precip button listener
 		$('.hourly-precip-button').click(function(){
 			precipGraph.removeClass('fade-out-left');
-			if(tempGraph.hasClass('fade-in-animation')) {
-				tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
 
-				setTimeout(function() {
-					tempGraph.addClass('display-none');
-					precipGraph.removeClass('display-none').addClass('fade-in-animation');
-				}, 500);
+			if(precipGraph.hasClass('fade-in-animation')){
+				precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
+				displayNoneTimeOut(precipGraph);
 			} else {
-				precipGraph.removeClass('display-none').addClass('fade-in-animation');
-			}
-		});
+				if(tempGraph.hasClass('fade-in-animation')) {
+					tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
 
-		// close button listener
-		$('#hourly-close').click(function(){
-			tempGraph.removeClass('fade-in-animation').addClass('fade-out-left');
-			precipGraph.removeClass('fade-in-animation').addClass('fade-out-left');
-			setTimeout(function(){
-				tempGraph.addClass('display-none');
-				precipGraph.addClass('display-none');
-			}, 500);
+					displayNoneTimeOut(tempGraph, precipGraph);
+				} else {
+					precipGraph.removeClass('display-none').addClass('fade-in-animation');
+				}
+			}
 		});
 	};
 
+
+
+	// Time out on animations to keep a smooth transition out and in
+	// Also used to close out of graph - 
+	// if graph is open and clicked on again it will animate off screen
+	var displayNoneTimeOut = function(graphToRemove, graphToAdd) {
+		setTimeout(function() {
+			graphToRemove.addClass('display-none');
+			if(graphToAdd !== undefined) {
+				graphToAdd.removeClass('display-none').addClass('fade-in-animation');
+			}
+		}, 500);
+	};
 
 
 
