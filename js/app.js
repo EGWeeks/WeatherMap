@@ -333,8 +333,6 @@ $(document).ready(function() {
 			$('.pop-' + index).addClass('wi wi-raindrops').text(' ' + day.pop + '%');
 			$('.qpf-' + index).addClass('wi wi-raindrop').text(' ' + day.qpfAllday + 'in');
 
-			// set and show button when is returned
-			$('#hourly-temp, #hourly-precip, #hourly-close').addClass('button');
 		});
 
 		// remove loading layer
