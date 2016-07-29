@@ -97,11 +97,7 @@
 	}
 }
 
-/*** top-bar ***/
 
-/*.top-bar {
-	max-width: 75rem;
-}*/
 
 /*** loading layer ***/
 
@@ -135,16 +131,13 @@
   animation: fadeOut 1s;
 }
 
-/*** topbar info ***/
-.menu a:hover {
-	color: #2199e8;
+
+
+/*** top-bar ***/
+
+.top-bar {
+	background: #e6e6e6;
 }
-
-.menu a:focus {
-	color: #2199e8;
-}
-
-
 
 /*** Mobile title bar ***/
 
@@ -152,6 +145,25 @@
 	background: #e6e6e6;
 	color: #2199e8;
 }
+
+/*** topbar info ***/
+.menu li:nth-child(odd) a:hover {
+	color: #c0e0bb;
+}
+
+.menu li:nth-child(odd) a:focus {
+	color: #a3ccff;
+}
+
+.menu li:nth-child(even) a:hover {
+	color: #2199e8;
+}
+
+.menu li:nth-child(even) a:focus {
+	color: #2199e8;
+}
+
+
 
 /* Allows Weather bar sits on top of map, 
 	Still allows for maps funcationality */
