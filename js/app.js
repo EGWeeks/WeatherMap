@@ -362,7 +362,7 @@ $(document).ready(function() {
 
 	// Hourly forecast data to show
 	var setHourlyChart = function(hours) {
-		$('').remove()
+
 		// Hourly temp Graph Config
 		var htg = $('#hourly-temp-graph');
 
