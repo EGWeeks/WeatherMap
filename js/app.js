@@ -317,8 +317,57 @@ $(document).ready(function() {
 		//humid icon and percent
 		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').text(localWeather.humid + ' %');
+
+		setQtipOnWeather();
 	};
 
+	var setQtipOnWeather = function() {
+		var tempId = $('#hourly-temp'),
+		windId = $('#wind-speed'),
+		precipId = $('#hourly-precip');
+
+		tempId.qtip({
+			content: {
+				text: "Temperature"
+			},
+			position: {
+				my: 'top middle',
+  			at: 'bottom center',
+  			target: tempId
+			},
+			style: {
+				classes: 'qtip-blue qtip-shadow'
+			}
+		});
+
+		windId.qtip({
+			content: {
+				text: "Wind Speed"
+			},
+			position: {
+				my: 'top middle',
+  			at: 'bottom center',
+  			target: windId
+			},
+			style: {
+				classes: 'qtip-blue qtip-shadow'
+			}
+		});
+
+		precipId.qtip({
+			content: {
+				text: "Humidity"
+			},
+			position: {
+				my: 'top middle',
+  			at: 'bottom center',
+  			target: precipId
+			},
+			style: {
+				classes: 'qtip-blue qtip-shadow'
+			}
+		});
+	};
 
 
 
