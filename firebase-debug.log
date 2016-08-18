@@ -1,8 +1,0 @@
-[debug] ----------------------------------------------------------------------
-[debug] Command:      /usr/local/Cellar/node/4.2.1/bin/node /usr/local/bin/firebase serve
-[debug] Platform:     darwin
-[debug] Node Version: v6.2.2
-[debug] Time:         Thu Aug 18 2016 10:22:51 GMT-0600 (MDT)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Listening at http://localhost:5000
