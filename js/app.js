@@ -20,7 +20,6 @@ $(document).ready(function() {
 		    initMap(self.user.lat, self.user.lng);
 		    // GET reverse gecode and weather
 		    apiCalls(self.user.lat, self.user.lng);
-
 		  }); 
 		} catch(e) {
 			alert('Ehhh... Looks like there is a problem getting your current location. Here is the Error: ' + e);
