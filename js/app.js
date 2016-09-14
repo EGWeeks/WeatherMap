@@ -4,21 +4,19 @@ $(document).ready(function() {
 	$(document).foundation();
 
 	var self = this;
-
+	self.map = {};
 	self.user = {};
-
-
-
-
+	self.styles = {};
+	self.styles.map = {};
+	self.styles.map.night = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
+	self.styles.map.day = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","stylers":[{"color":"#84afa3"},{"lightness":52}]},{"stylers":[{"saturation":-17},{"gamma":0.36}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#3f518c"}]}];
 	// get User Location
 	var getLocation = function() {
 		try {
 		  navigator.geolocation.getCurrentPosition(function(position) {
 		  	self.user.lat = position.coords.latitude;
 		    self.user.lng = position.coords.longitude;
-			  // Init map
-		    initMap(self.user.lat, self.user.lng);
-		    // GET reverse gecode and weather
+
 		    apiCalls(self.user.lat, self.user.lng);
 		  }); 
 		} catch(e) {
@@ -31,11 +29,12 @@ $(document).ready(function() {
 
 	//inital a new map
 	var initMap = function(lat, lng) {
+		var mStyle = self.map.style;
 
 	  	var mapOptions = {
         zoom: 10,
         center: new google.maps.LatLng(lat,lng),
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
         zoomControl: true,
         zoomControlOptions: {
 			  	position: google.maps.ControlPosition.LEFT_CENTER
@@ -44,29 +43,8 @@ $(document).ready(function() {
 			  scaleControl: false,
 			  streetViewControl: false,
 			  rotateControl: false,
-			  styles: [
-            {
-              featureType: 'all',
-              stylers: [
-                { saturation: -30 }
-              ]
-            },{
-              featureType: 'road.arterial',
-              elementType: 'geometry',
-              stylers: [
-                { hue: '#00ffee' },
-                { saturation: 50 }
-              ]
-            },{
-              featureType: 'poi.business',
-              elementType: 'labels',
-              stylers: [
-                { visibility: 'off' }
-              ]
-            }
-          ]
+			  styles: mStyle
     	};
-
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
 	};
 
@@ -146,15 +124,25 @@ $(document).ready(function() {
 		//Weather api call
 		//$.get('wunderground.json')
 		$.when($.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyAWKl-KPsCIij9Y3Ui9ounu42liHkm_egw'),
-				$.get('https://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/q/'+lat+','+lng+'.json'))
+				$.get('https://api.wunderground.com/api/acb24fc760a62b97/conditions/forecast/hourly/astronomy/q/'+lat+','+lng+'.json'))
 			.then(function(location, data) {
+				checkTime(data[0].moon_phase);
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
 				checkHourlyForecast(data[0].hourly_forecast);
+				initMap(self.user.lat, self.user.lng);
+				initMarker();
 			}, function(error) {
 				alert('Ehhh. This is embarassing but there seems to be a problem with receiving data right now. Error message: ' + error.statusText);
 			});
 
+	};
+
+	var checkTime = function(cycle) {
+		self.time = {};
+		self.time.current = cycle.current_time.hour + cycle.current_time.minute;
+		self.time.sunrise = cycle.sunrise.hour + cycle.sunrise.minute;
+		self.time.sunset = cycle.sunset.hour + cycle.sunset.minute;
 	};
 
 
@@ -174,7 +162,7 @@ $(document).ready(function() {
 		} else {
 			self.user.formatAdd = locate[3].formatted_address;
 		}
-		// Parse current weather data
+
 		self.weather = {
 			country: weather.display_location.country,
 			full: weather.display_location.full,
@@ -186,7 +174,6 @@ $(document).ready(function() {
 			feelsLikeFah: weather.feelslike_f
 		};
 
-		// weather = self.weather
 		if(self.weather.country.toLowerCase() === 'us') {
 			self.weather.temp = Math.round(self.weather.tempFah);
 			self.weather.tempImg = 'wi wi-fahrenheit';
@@ -194,39 +181,89 @@ $(document).ready(function() {
 			self.weather.temp = Math.round((self.weather.tempFah - 32) * 5/9);
 			self.weather.tempImg = 'wi wi-celsius';
 		}
-
-		switch (self.weather.main.toLowerCase()) {
-			case 'clear':
-				self.weather.icon = 'wi wi-day-sunny';
-				break;
-			case 'chancerain':
-			case 'rain':
-				self.weather.icon = 'wi wi-rain';
-				break;
-			case 'mostlycloudy':
-			case 'partlycloudy':
-			case 'cloudy':
-				self.weather.icon = 'wi wi-cloudy';
-				break;
-			case 'partlysunny':
-				self.weather.icon = 'wi wi-day-cloudy';
-				break;
-			case 'tstorms':
-				self.weather.icon = 'wi wi-storm-showers';
-				break;
-			case 'chancesnow':
-			case 'snow':
-				self.weather.icon = 'wi wi-snow';
-				break;
-			default:
-				self.weather.icon = 'wi wi-na';
-		}
-		//Marker icon depends on weather api calls return value
-		initMarker();
+			
+		weatherIcons(self.weather.main, self.weather);
+		
 
 		setWeather(self.weather);
 	};
 
+
+
+	var weatherIcons = function(check, obj) {
+		if(parseInt(self.time.current) < parseInt(self.time.sunset) &&
+		 parseInt(self.time.current) > parseInt(self.time.sunrise)) {
+		 	self.map.style = self.styles.map.day;
+			dayWeatherIcon(check, obj);
+		} else {
+			nightWeatherIcon(check, obj);
+			self.map.style = self.styles.map.night;
+		}
+	};
+
+
+
+	var dayWeatherIcon = function(check, obj) {
+		switch (check.toLowerCase()) {
+			case 'clear':
+				obj.icon = 'wi wi-day-sunny';
+				break;
+			case 'chancerain':
+			case 'rain':
+				obj.icon = 'wi wi-rain';
+				break;
+			case 'mostlycloudy':
+			case 'partlycloudy':
+			case 'cloudy':
+				obj.icon = 'wi wi-cloudy';
+				break;
+			case 'partlysunny':
+				obj.icon = 'wi wi-day-cloudy';
+				break;
+			case 'tstorms':
+			case 'chancetstorms':
+				obj.icon = 'wi wi-storm-showers';
+				break;
+			case 'chancesnow':
+			case 'snow':
+				obj.icon = 'wi wi-snow';
+				break;
+			default:
+				obj.icon = 'wi wi-na';
+		}
+	};
+
+
+
+	var nightWeatherIcon = function(check, obj) {
+		switch (check.toLowerCase()) {
+			case 'clear':
+				obj.icon = 'wi wi-night-clear';
+				break;
+			case 'chancerain':
+			case 'rain':
+				obj.icon = 'wi wi-night-alt-showers';
+				break;
+			case 'mostlycloudy':
+			case 'partlycloudy':
+			case 'cloudy':
+				obj.icon = 'wi wi-night-alt-cloudy';
+				break;
+			case 'partlysunny':
+				obj.icon = 'wi wi-night-partly-cloudy';
+				break;
+			case 'tstorms':
+			case 'chancetstorms':
+				obj.icon = 'wi wi-night-storm-showers';
+				break;
+			case 'chancesnow':
+			case 'snow':
+				obj.icon = 'wi wi-night-snow';
+				break;
+			default:
+				obj.icon = 'wi wi-na';
+		}
+	};
 
 
 
@@ -252,34 +289,8 @@ $(document).ready(function() {
 				daily.low = Math.round((day.low.fahrenheit - 32) * 5/9);
 
 			}
-			// Determine icon
-			switch (daily.iconDesc.toLowerCase()) {
-				case 'clear':
-					daily.icon = 'wi wi-day-sunny';
-					break;
-				case 'chancerain':
-				case 'rain':
-					daily.icon = 'wi wi-rain';
-					break;
-				case 'mostlycloudy':
-				case 'partlycloudy':
-				case 'cloudy':
-					daily.icon = 'wi wi-cloudy';
-					break;
-				case 'partlysunny':
-					daily.icon = 'wi wi-day-cloudy';
-					break;
-				case 'tstorms':
-				case 'chancetstorms':
-					daily.icon = 'wi wi-storm-showers';
-					break;
-				case 'snow':
-				case 'chancesnow':
-					daily.icon = 'wi wi-snow';
-					break;
-				default:
-					daily.icon = 'wi wi-na';
-			}
+			weatherIcons(daily.iconDesc, daily);
+
 			self.forecast.push(daily);
 		});
 
@@ -337,56 +348,6 @@ $(document).ready(function() {
 		//humid icon and percent
 		$('#humid-img').addClass('wi wi-humidity');
 		$('.humid').text(localWeather.humid + ' %');
-
-		setQtipOnWeather();
-	};
-
-	var setQtipOnWeather = function() {
-		var tempId = $('#hourly-temp'),
-		windId = $('#wind-speed'),
-		precipId = $('#hourly-precip');
-
-		tempId.qtip({
-			content: {
-				text: "Temperature"
-			},
-			position: {
-				my: 'top middle',
-  			at: 'bottom center',
-  			target: tempId
-			},
-			style: {
-				classes: 'qtip-blue qtip-shadow'
-			}
-		});
-
-		windId.qtip({
-			content: {
-				text: "Wind Speed"
-			},
-			position: {
-				my: 'top middle',
-  			at: 'bottom center',
-  			target: windId
-			},
-			style: {
-				classes: 'qtip-blue qtip-shadow'
-			}
-		});
-
-		precipId.qtip({
-			content: {
-				text: "Humidity"
-			},
-			position: {
-				my: 'top middle',
-  			at: 'bottom center',
-  			target: precipId
-			},
-			style: {
-				classes: 'qtip-blue qtip-shadow'
-			}
-		});
 	};
 
 
