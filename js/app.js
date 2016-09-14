@@ -43,7 +43,28 @@ $(document).ready(function() {
         mapTypeControl: false,
 			  scaleControl: false,
 			  streetViewControl: false,
-			  rotateControl: false
+			  rotateControl: false,
+			  styles: [
+            {
+              featureType: 'all',
+              stylers: [
+                { saturation: -30 }
+              ]
+            },{
+              featureType: 'road.arterial',
+              elementType: 'geometry',
+              stylers: [
+                { hue: '#00ffee' },
+                { saturation: 50 }
+              ]
+            },{
+              featureType: 'poi.business',
+              elementType: 'labels',
+              stylers: [
+                { visibility: 'off' }
+              ]
+            }
+          ]
     	};
 
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
