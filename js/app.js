@@ -7,10 +7,9 @@ $(document).ready(function() {
 	self.map = {};
 	self.user = {};
 	self.styles = {};
-	self.styles.map = {};
-	self.styles.map.night = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
-	self.styles.map.day = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","stylers":[{"color":"#84afa3"},{"lightness":52}]},{"stylers":[{"saturation":-17},{"gamma":0.36}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#3f518c"}]}];
-	// get User Location
+	self.styles.night = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
+	self.styles.day = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","stylers":[{"color":"#84afa3"},{"lightness":52}]},{"stylers":[{"saturation":-17},{"gamma":0.36}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#3f518c"}]}];
+
 	var getLocation = function() {
 		try {
 		  navigator.geolocation.getCurrentPosition(function(position) {
@@ -26,8 +25,6 @@ $(document).ready(function() {
 
 
 
-
-	//inital a new map
 	var initMap = function(lat, lng) {
 		var mStyle = self.map.style;
 
@@ -50,8 +47,6 @@ $(document).ready(function() {
 
 
 
-
-	//initial a new marker
 	var initMarker = function() {
 		//MUST USE user obj lat and lng and not maps
 		var coords = new google.maps.LatLng(self.user.lat, self.user.lng);
@@ -74,8 +69,6 @@ $(document).ready(function() {
 
 
 
-
-	// Marker update weather data
 	var markerListener = function(marker) {
 
 		marker.addListener('mouseup', function() {
@@ -117,8 +110,6 @@ $(document).ready(function() {
 
 
 
-
-	//Calls reverse geocode and weather api
 	var apiCalls = function(lat, lng) {
 
 		//Weather api call
@@ -138,6 +129,8 @@ $(document).ready(function() {
 
 	};
 
+
+
 	var checkTime = function(cycle) {
 		self.time = {};
 		self.time.current = cycle.current_time.hour + cycle.current_time.minute;
@@ -147,8 +140,6 @@ $(document).ready(function() {
 
 
 
-
-	// Parse current weather data that goes in TOPBAR
 	var checkWeather = function(location, weather) {
 
 		var locate = location[0].results;
@@ -193,11 +184,13 @@ $(document).ready(function() {
 	var weatherIcons = function(check, obj) {
 		if(parseInt(self.time.current) < parseInt(self.time.sunset) &&
 		 parseInt(self.time.current) > parseInt(self.time.sunrise)) {
-		 	self.map.style = self.styles.map.day;
+		 	self.map.topInfo = "day-topbar";
+		 	self.map.style = self.styles.day;
 			dayWeatherIcon(check, obj);
 		} else {
+		 	self.map.topInfo = "night-topbar";
+			self.map.style = self.styles.night;
 			nightWeatherIcon(check, obj);
-			self.map.style = self.styles.map.night;
 		}
 	};
 
@@ -289,7 +282,7 @@ $(document).ready(function() {
 				daily.low = Math.round((day.low.fahrenheit - 32) * 5/9);
 
 			}
-			weatherIcons(daily.iconDesc, daily);
+			dayWeatherIcon(daily.iconDesc, daily);
 
 			self.forecast.push(daily);
 		});
@@ -330,6 +323,10 @@ $(document).ready(function() {
 
 	//Weather data to show
 	var setWeather = function(localWeather) {
+		$('.top-bar').addClass(self.map.topInfo);
+		$('.menu').addClass(self.map.topInfo);
+		$('.forecast-color').addClass(self.map.topInfo);
+		$('.hourly-data').addClass(self.map.topInfo);
 		// check if temp img needs to change
 		var currentTempImgClass = $('#temp-img').attr('class');
 		if(currentTempImgClass !== localWeather.tempImg) {
@@ -403,7 +400,7 @@ $(document).ready(function() {
 					datasets: [
 						{
 							label: 'Hourly Temperature',
-							backgroundColor: 'rgba(255, 255, 255, 0.6)',
+							backgroundColor: 'rgba(255, 255, 255, 0.2)',
 							pointBackgroundColor: '#ff0000',
 							data: hours[1]
 						}
@@ -429,7 +426,7 @@ $(document).ready(function() {
 				datasets: [
 					{
 						pointBackgroundColor: 'rgba(0,0,0,0.6)',
-						borderColor: 'rgba(0, 0, 0, 0.6)',
+						borderColor: '#a3ccff',
 						label: 'Potential Amount of Precip',
 						data: hours[2],
 						yAxisID: 'y-axis-1'

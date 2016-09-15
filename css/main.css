@@ -136,17 +136,14 @@
 
 
 
-/*** top-bar ***/
+/*** topbar ***/
 
-.top-bar {
-	background: #e6e6e6;
+.day-topbar {
+	background-color: #fff !important;
 }
 
-/*** Mobile title bar ***/
-
-.title-bar {
-	background: #e6e6e6;
-	color: #2199e8;
+.night-topbar {
+	background-color: #000 !important;
 }
 
 /*** topbar info ***/
@@ -189,7 +186,6 @@
 
 .forecast-color {
 	color: #2199e8;
-	background-color: #e6e6e6;
 }
 
 .forecast-high {
@@ -273,7 +269,6 @@
 /*** Hourly graphs ***/
 
 .hourly-data {
-	background-color: #e6e6e6;
 	padding: 0 1rem;
 }
 
