@@ -2,8 +2,7 @@
 [debug] Command:      /usr/local/Cellar/node/4.2.1/bin/node /usr/local/bin/firebase serve
 [debug] Platform:     darwin
 [debug] Node Version: v6.2.2
-[debug] Time:         Wed Sep 14 2016 21:24:22 GMT-0600 (MDT)
+[debug] Time:         Thu Sep 15 2016 18:22:55 GMT-0600 (MDT)
 [debug] ----------------------------------------------------------------------
 [debug] 
 [info] Listening at http://localhost:5000
-[info] Shutting down...

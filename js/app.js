@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$(document).foundation();
 
 	var self = this;
-	self.map = {};
+	self.mapStyles = {};
 	self.user = {};
 	self.styles = {};
 	self.styles.night = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
@@ -26,7 +26,7 @@ $(document).ready(function() {
 
 
 	var initMap = function(lat, lng) {
-		var mStyle = self.map.style;
+		var mStyle = self.mapStyles.style;
 
 	  	var mapOptions = {
         zoom: 10,
@@ -121,8 +121,10 @@ $(document).ready(function() {
 				checkWeather(location, data[0].current_observation);
 				checkForecast(data[0].forecast.simpleforecast.forecastday);
 				checkHourlyForecast(data[0].hourly_forecast);
-				initMap(self.user.lat, self.user.lng);
-				initMarker();
+				if(!self.map) {
+					initMap(self.user.lat, self.user.lng);
+					initMarker();
+				}
 			}, function(error) {
 				alert('Ehhh. This is embarassing but there seems to be a problem with receiving data right now. Error message: ' + error.statusText);
 			});
@@ -184,12 +186,12 @@ $(document).ready(function() {
 	var weatherIcons = function(check, obj) {
 		if(parseInt(self.time.current) < parseInt(self.time.sunset) &&
 		 parseInt(self.time.current) > parseInt(self.time.sunrise)) {
-		 	self.map.topInfo = "day-topbar";
-		 	self.map.style = self.styles.day;
+		 	self.mapStyles.topInfo = "day-topbar";
+		 	self.mapStyles.style = self.styles.day;
 			dayWeatherIcon(check, obj);
 		} else {
-		 	self.map.topInfo = "night-topbar";
-			self.map.style = self.styles.night;
+		 	self.mapStyles.topInfo = "night-topbar";
+			self.mapStyles.style = self.styles.night;
 			nightWeatherIcon(check, obj);
 		}
 	};
@@ -323,10 +325,10 @@ $(document).ready(function() {
 
 	//Weather data to show
 	var setWeather = function(localWeather) {
-		$('.top-bar').addClass(self.map.topInfo);
-		$('.menu').addClass(self.map.topInfo);
-		$('.forecast-color').addClass(self.map.topInfo);
-		$('.hourly-data').addClass(self.map.topInfo);
+		$('.top-bar').addClass(self.mapStyles.topInfo);
+		$('.menu').addClass(self.mapStyles.topInfo);
+		$('.forecast-color').addClass(self.mapStyles.topInfo);
+		$('.hourly-data').addClass(self.mapStyles.topInfo);
 		// check if temp img needs to change
 		var currentTempImgClass = $('#temp-img').attr('class');
 		if(currentTempImgClass !== localWeather.tempImg) {
