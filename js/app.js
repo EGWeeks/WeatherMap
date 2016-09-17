@@ -43,8 +43,13 @@ $(document).ready(function() {
 			  styles: mStyle
     	};
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
+		var something = self.map.getBounds;
+		console.log(something);
 	};
 
+	var getRadar = function(bounds) {
+		console.log(bounds);
+	};
 
 
 	var initMarker = function() {
@@ -329,6 +334,8 @@ $(document).ready(function() {
 		$('.menu').addClass(self.mapStyles.topInfo);
 		$('.forecast-color').addClass(self.mapStyles.topInfo);
 		$('.hourly-data').addClass(self.mapStyles.topInfo);
+		$('.weather-bar').addClass(self.mapStyles.topInfo);
+
 		// check if temp img needs to change
 		var currentTempImgClass = $('#temp-img').attr('class');
 		if(currentTempImgClass !== localWeather.tempImg) {
