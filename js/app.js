@@ -43,13 +43,8 @@ $(document).ready(function() {
 			  styles: mStyle
     	};
 		self.map = new google.maps.Map($('#map')[0], mapOptions);
-		var something = self.map.getBounds;
-		console.log(something);
 	};
 
-	var getRadar = function(bounds) {
-		console.log(bounds);
-	};
 
 
 	var initMarker = function() {
